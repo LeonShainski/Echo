@@ -1,0 +1,3 @@
+# This is the script that will take news articles from our feeds and create a short summary of any given article
+
+This helps our users get the gist of the news article quickly without having to necessarily read the entire article (though that option is available), whilst also providing a concise version of the article to aide our machine-learning platform to more easily examine the contents of the article, and as such, allow for a more accurate categorization of the article.
