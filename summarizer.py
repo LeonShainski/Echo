@@ -21,6 +21,11 @@ urlArr=[]
 for i in range (len(urls)):
     urlArr.append(urls[i])
 
+#Creating a 2D array to store a URL alongside the condesed version of the news it brings
+rows, cols = (len(urlArr), 2)
+arr = [[0]*cols]*rows
+print(arr)
+
 #Looping through each URL
 for i in range (len(urlArr)):
     currentURL=urlArr[i]
@@ -46,11 +51,22 @@ for i in range (len(urlArr)):
         endFile = open("demoTesting2.txt", "a")
         endFile.write(summarizedText)
         endFile.close()
+
+        #Saving URL an subsequent summarized text to a 2D array
+        arr[i][0]=currentURL
+        arr[i][1]=summarizedText
         
 
     except requests.ConnectionError as error:
         print(error)
 
+print(arr)
+#Transforming 2D array to JSON format
+jsonArr=(json.dumps(arr, sort_keys=True, indent=4))
+#Saving the 2D array (Now in JSON format) to a file
+endFile = open("demoTesting3.json", "a")
+endFile.write(jsonArr)
+endFile.close()
     
 print("All done!")
 
