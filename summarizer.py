@@ -24,7 +24,6 @@ for i in range (len(urls)):
 #Creating a 2D array to store a URL alongside the condesed version of the news it brings
 rows, cols = (len(urlArr), 2)
 arr = [[0]*cols]*rows
-print(arr)
 
 #Looping through each URL
 for i in range (len(urlArr)):
@@ -45,7 +44,12 @@ for i in range (len(urlArr)):
 
         #Taking the actual article from the JSON response
         jsonResponse=response.json()
-        summarizedText=jsonResponse["sm_api_content"]
+
+        #Making sure the script doesn't stop when the API encounters a website that it doesn't like
+        try:
+            summarizedText=jsonResponse["sm_api_content"]
+        except:
+            summarizedText="An Error occured"
 
         #Saving the summarized article to file
         endFile = open("demoTesting2.txt", "a")
@@ -56,15 +60,14 @@ for i in range (len(urlArr)):
         arr[i][0]=currentURL
         arr[i][1]=summarizedText
         
-
     except requests.ConnectionError as error:
         print(error)
+        pass
 
-print(arr)
 #Transforming 2D array to JSON format
 jsonArr=(json.dumps(arr, sort_keys=True, indent=4))
 #Saving the 2D array (Now in JSON format) to a file
-endFile = open("demoTesting3.json", "a")
+endFile = open("demoTesting.json", "a")
 endFile.write(jsonArr)
 endFile.close()
     
