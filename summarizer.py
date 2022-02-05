@@ -23,10 +23,16 @@ for i in range (len(urls)):
 
 #Creating a 2D array to store a URL alongside the condesed version of the news it brings
 rows, cols = (len(urlArr), 2)
-arr = [[0]*cols]*rows
+#arr = [[0]*cols]*rows
+arr = [[None]*cols for _ in range(rows)]
+for i in range(len(urlArr)):
+    arr[i][0]="0"
+    arr[i][1]="0"
+
 
 #Looping through each URL
-for i in range (len(urlArr)):
+
+for i in range (len(arr)):
     currentURL=urlArr[i]
     #Resetting the parameters each loop to reflect the current URL
     params={
@@ -40,7 +46,7 @@ for i in range (len(urlArr)):
         # Code here will only run if the request is successful
         response = requests.get("https://api.smmry.com", params=params)
         #jsonResponse=response.json()
-        print (response.json())
+        #print (response.json())
 
         #Taking the actual article from the JSON response
         jsonResponse=response.json()
@@ -52,13 +58,16 @@ for i in range (len(urlArr)):
             summarizedText="An Error occured"
 
         #Saving the summarized article to file
-        endFile = open("demoTesting2.txt", "a")
+        endFile = open("demoTesting05.txt", "a")
         endFile.write(summarizedText)
+        endFile.write("\n")
         endFile.close()
 
         #Saving URL an subsequent summarized text to a 2D array
         arr[i][0]=currentURL
         arr[i][1]=summarizedText
+
+        
         
     except requests.ConnectionError as error:
         print(error)
@@ -67,7 +76,7 @@ for i in range (len(urlArr)):
 #Transforming 2D array to JSON format
 jsonArr=(json.dumps(arr, sort_keys=True, indent=4))
 #Saving the 2D array (Now in JSON format) to a file
-endFile = open("demoTesting.json", "a")
+endFile = open("demoTesting05.json", "a")
 endFile.write(jsonArr)
 endFile.close()
     
