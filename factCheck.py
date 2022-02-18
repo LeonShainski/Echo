@@ -60,7 +60,7 @@ factCheckRatingsArr=[]
 
 for i in range (len(claims)):
     input_claim=claims[i]
-    print(input_claim)
+    #print(input_claim)
     #Resetting the parameters each loop to reflect the current URL
     try:
         #Printing the URL and its type to make sure the program is running OK
@@ -70,7 +70,7 @@ for i in range (len(claims)):
         #$response = requests.get("https://api.smmry.com", params=params)
         #jsonResponse=response.json()
         #print (response.json())
-        api_endpoint = 'https://idir.uta.edu/claimbuster/api/v2/score/text/', input_claim
+        api_endpoint = 'https://idir.uta.edu/claimbuster/api/v2/score/text/'+ input_claim
         request_headers = {"x-api-key": api_key}
 
         # Send the GET request to the API and store the api response
@@ -96,7 +96,7 @@ for i in range (len(claims)):
             #Saving URL an subsequent summarized text to a 2D array
             #arr[i][0]=input_claim
             #arr[i][1]=rating
-            factCheckRatingsArr.append(str(rating))
+        factCheckRatingsArr.append(str(rating))
 
         
         
@@ -104,8 +104,10 @@ for i in range (len(claims)):
         print(error)
         pass
 
-endFile = open("demoTestingRatings17.txt", "a", encoding="utf-8")
-for i in range (factCheckRatingsArr):
+print(factCheckRatingsArr[2])
+
+endFile = open("demoTestingRatings18b.txt", "a", encoding="utf-8")
+for i in range (len(factCheckRatingsArr)):
     endFile.write(factCheckRatingsArr[i])
     endFile.write("\n")
 endFile.close()
