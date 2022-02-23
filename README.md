@@ -3,5 +3,7 @@
 
 The purpose of this unified program is to twofold: 
 
--Firstly, this unification allows for easier data consolidation, making writing connective tissue between the backend components easier. Speaking of which...
+-Firstly, this unification allows for easier data consolidation, making writing connective tissue between the backend components easier. 
+
 -Secondly, this *is* connective tissue, in a sense, as consolidating our components does what connective tissue does - connect our components together. Unification is the ultimate connection.
+
