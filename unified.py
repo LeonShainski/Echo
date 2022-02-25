@@ -1,6 +1,10 @@
 from fileinput import filename
 import requests
 import json
+import firebase_admin
+from firebase_admin import db
+from firebase_admin import credentials
+from firebase_admin import db
 
 def summarize():
     my_headers = {'Authorization' : 'Bearer {access_token}'}
@@ -19,7 +23,7 @@ def summarize():
         }
         try:
             #Printing the URL and its type to make sure the program is running OK
-            print(currentURL, type(currentURL))
+            #print(currentURL, type(currentURL))
 
             # Code here will only run if the request is successful
             response = requests.get("https://api.smmry.com", params=params)
@@ -100,12 +104,47 @@ def factCheck():
             print(error)
             pass
 
+def uploadData():
+    keyFile = open("databaseUrl.txt", "r")
+    database_url=keyFile.read()
+    cred = credentials.Certificate("firebaseCredentials.json")
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': database_url
+    })
+
+    ref=db.reference()
+
+
+    ref = ref.child('articles')
+    for i in range (len(arr)):
+        ref.push({
+            'link': arr[i][0],
+            'summary':arr[i][1],
+            'categories': [
+                'temp',
+                'temporary',
+                'temp and temporary'
+            ],'fact_score':arr[i][2]
+            
+
+            
+        })
+
+    #print(ref.get())
+
 def main():
+    print("Summarizing...")
     summarize()
     print("Summarization Complete")
+
     print("Fact Checking...")
     factCheck()
     print("Fact Check Complete")
+
+    print("Uploading to database...")
+    uploadData()
+    print("Upload complete.")
+
     print("All Done!")
     print(arr)
 
