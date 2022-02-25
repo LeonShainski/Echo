@@ -51,7 +51,29 @@
     },
     {
         "url": "https://o.canada.com/feed"
+    },
+    {
+        "url": "http://biv.com/rss"
+    },
+    {
+        "url": "https://ottawasun.com/feed"
+    },
+    {
+        "url": "https://thestarphoenix.com/feed"
+    },
+    {
+        "url": "https://feeds.feedblitz.com/thetyee"
+    },
+    {
+        "url": "https://leaderpost.com/feed"
+    },
+    {
+        "url": "https://rss.metroland.com/15/article/waterlooregion"
+    },
+    {
+        "url": "https://edmontonsun.com/feed"
     }
+
 
 
 ]
