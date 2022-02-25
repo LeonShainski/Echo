@@ -1,5 +1,57 @@
 [{
-    "url": "https://rss.cbc.ca/lineup/topstories.xml"
-}, {
-    "url": "https://www.ctvnews.ca/rss/ctvnews-ca-top-stories-public-rss-1.822009"
-}]
+        "url": "https://rss.cbc.ca/lineup/topstories.xml"
+    },
+    {
+        "url": "https://www.ctvnews.ca/rss/ctvnews-ca-top-stories-public-rss-1.822009"
+    },
+    {
+        "url": "https://globalnews.ca/feed/"
+    },
+    {
+        "url": "http://www.thestar.com/content/thestar/feed.RSSManagerServlet.topstories.full.rss"
+    },
+    {
+        "url": "https://torontosun.com/feed"
+    },
+    {
+        "url": "http://feeds.feedburner.com/FP_TopStories"
+    },
+    {
+        "url": "https://vancouversun.com/feed?x=1"
+    },
+    {
+        "url": "https://toronto.citynews.ca/feed/"
+    },
+    {
+        "url": "https://montrealgazette.com/feed"
+    },
+    {
+        "url": "https://www.macleans.ca/feed/"
+    },
+    {
+        "url": "https://calgaryherald.com/feed"
+    },
+    {
+        "url": "https://ottawacitizen.com/feed"
+    },
+    {
+        "url": "https://www.canadianbusiness.com/feed/"
+    },
+    {
+        "url": "https://www.straight.com/content/rss"
+    },
+    {
+        "url": "https://edmontonjournal.com/feed"
+    },
+    {
+        "url": "https://windsorstar.com/feed"
+    },
+    {
+        "url": "https://theprovince.com/feed"
+    },
+    {
+        "url": "https://o.canada.com/feed"
+    }
+
+
+]
