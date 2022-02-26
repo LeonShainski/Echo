@@ -15,7 +15,8 @@ async function readRss(inFile) {
             var feed = await parser.parseURL(url);
             //console.log(feed.title);
             feed.items.forEach(async item => {
-                feedUrls.push(item.link);
+            
+                feedUrls.push(item.link.trim());
             });
         } resolve(feedUrls);
     })
