@@ -6,4 +6,6 @@ The plan is to optimize this script to take in that list of articles from a univ
 
 This fact checker is also still yet to be stress tested, so functionality may change (or we may use a different fact checker altogether)
 
+This has now been implemented into the unified backend component.
+
 Stay tuned for more updates!
