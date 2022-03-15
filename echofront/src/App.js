@@ -53,18 +53,6 @@ function App() {
     await signOut(auth);
   };
 
-  //read
-  // useEffect(() => {
-  //   onValue(ref(database), (snapshot) => {
-  //     const data = snapshot.val();
-  //     if (data !== null) {
-  //       Object.values(data).map((article) => {
-  //         setFeed(oldFeed => [...oldFeed, article]);
-  //       })
-  //     }
-  //   })
-
-  // })
 
   const getData = () => {
     const data = ref(database, 'articles/');
@@ -72,7 +60,7 @@ function App() {
       const feed = snapshot.val();
       Object.values(feed).map(item =>{
         if (item.link !== '0'){
-        console.log(item.link);
+        //console.log(item.link);
         setNews((oldArray) => [...oldArray, item.link])
         }
       })
