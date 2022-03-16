@@ -1,11 +1,17 @@
 import React from "react";
-import fire from '../firebase-config' 
+import fire from '../firebase-config'
 
-export default function Newsfeed() {
+function NewsFeed(props) {
 
-    return(
+    return (
+
         <div>
-
+            {props.news.map((item) => (
+                <p><a href={item[0]}>{item[1]}</a></p>
+            ))}
         </div>
+
     )
 }
+
+export default NewsFeed
