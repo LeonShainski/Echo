@@ -19,7 +19,7 @@ function Header(props) {
   };
 
 return(
-  <div>
+  
 <Navbar bg="primary" expand="lg">
   <Container>
     <Navbar.Brand >ECHO</Navbar.Brand>
@@ -41,7 +41,7 @@ return(
     </Navbar.Collapse>
   </Container>
 </Navbar>
-</div>
+
 )
 }
 

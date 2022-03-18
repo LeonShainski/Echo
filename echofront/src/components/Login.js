@@ -1,7 +1,9 @@
 
 
 function Login(){
+
     return (
+        <div>
         <div>
         <h3> Register User </h3>
         <input
@@ -42,5 +44,6 @@ function Login(){
       {user?.email}
 
       <button onClick={logout}> Sign Out </button>
+      </div>
     )
 }
