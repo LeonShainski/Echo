@@ -7,3 +7,7 @@ The purpose of this unified program is to twofold:
 
 -Secondly, this *is* connective tissue, in a sense, as consolidating our components does what connective tissue does - connect our components together. Unification is the ultimate connection.
 
+unifiedV2 adds functionality to the original unified, namely including support for working with the S3 bucket and producing data ready for categorization during execution. The latter is the reason for the articleFixerUpper, as it works to take the data outputted by unifiedV2, normalizing the results, and outputting a properly formatted excel spreadsheet.
+
+
+
