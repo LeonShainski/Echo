@@ -1,10 +1,12 @@
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, Image, ImageBackground} from 'react-native';
 import 'react-native-url-polyfill/auto'
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import Auth from '../components/Auth'
 import Account from '../components/Account'
 import { Session } from '@supabase/supabase-js'
+import { withTheme } from 'react-native-elements';
+
 
 
 
@@ -19,11 +21,14 @@ function LoginScreen({navigation}) {
     }
 
     return (
+        <>
         <View style={styles.container}>
-            <Text >HELLO WORLD!</Text>
-            <Pressable onPress={pressHandler}><Text>NO ACCOUNT YET?</Text></Pressable>
-            
+        <Image imageStyle={styles.image} source={require('../assets/Leon_Echo_MediumFullLogoWithPhone_Version1.png')}/>
+            <Text >Welcome to Echo, more coming soon!</Text>
+            <Pressable onPress={pressHandler}><Text style={styles.myAccountButton}>My Account</Text></Pressable>
         </View>
+            </>
+
 
     );
 }
@@ -33,9 +38,15 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+      flex: 3,
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
     },
+    image: {
+        backgroundColor: 'yelow'
+    },
+    myAccountButton: {
+        color: 'blue'
+    }
   });
