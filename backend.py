@@ -36,7 +36,7 @@ def getUrls(data):
 def deduplicate(urls):
   return list(dict.fromkeys(urls))
 
-
+"""
 def upload_to_aws(local_file, bucket, s3_file):
     s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
@@ -51,6 +51,7 @@ def upload_to_aws(local_file, bucket, s3_file):
     except NoCredentialsError:
         print("Credentials not available")
         return False
+        """
 
 """ for i in data:
     feed = feedparser.parse(i["url"])
@@ -64,6 +65,7 @@ f.close()
 
 #Uploading to S3
 print('Uploading...')
-uploaded = upload_to_aws('output.txt', 'echo-storage-leon', 'testingName.txt')
+a
+#uploaded = upload_to_aws('output.txt', 'echo-storage-leon', 'testingName.txt')
 print('Uploaded!')
   
