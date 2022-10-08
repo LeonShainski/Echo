@@ -25,7 +25,11 @@ function LoginScreen({navigation}) {
         <View style={styles.container}>
         <Image imageStyle={styles.image} source={require('../assets/Leon_Echo_MediumFullLogoWithPhone_Version1.png')}/>
             <Text >Welcome to Echo, more coming soon!</Text>
-            <Pressable onPress={pressHandler}><Text style={styles.myAccountButton}>My Account</Text></Pressable>
+            <Pressable onPress={pressHandler}>
+                <Text style={styles.myAccountButton}>
+                    My Account
+                </Text>
+            </Pressable>
         </View>
             </>
 

@@ -1,8 +1,16 @@
-import {View, Text, Button} from 'react-native';
+import {StyleSheet, View, Text, Button, FlatList,ScrollView} from 'react-native';
 import LoginScreen from './LoginScreen';
+import { useEffect, useState } from 'react';
+
 
 function SignupScreen() {
-    return ;
+
+    return (
+            <View>
+                <Text>Hello world</Text>
+            </View>
+    );
 }
 
 export default SignupScreen;
+
