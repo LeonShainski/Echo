@@ -8,8 +8,8 @@ from supabase import create_client
 
 from supabase import create_client
 import json
-API_URL='https://vsaxkocxddahwxlbzkjj.supabase.co'
-API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzYXhrb2N4ZGRhaHd4bGJ6a2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjM3MjU2MjYsImV4cCI6MTk3OTMwMTYyNn0.mUro088rMzVnGQAZRxtelwUyE-hLLCHJ5VfxoTHLbsM'
+API_URL='https://..co'
+API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..mUro088rMzVnGQAZRxtelwUyE-hLLCHJ5VfxoTHLbsM'
 supabase = create_client(API_URL, API_KEY)
 supabase
 
