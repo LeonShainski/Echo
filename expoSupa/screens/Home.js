@@ -75,7 +75,7 @@ function addSentiment(sentiment){
     console.log('added');
     console.log(arr);
     }
-    console.log('not added');
+    console.log('not added ');
     console.log(arr);
    
 }
