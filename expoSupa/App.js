@@ -16,6 +16,13 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 export default function App() {
+
+  const [factScore, setFactScore] = useState(50);
+  const [sentiment, setSentiment] = useState(['happy', 'sad', 'informational']);
+  const [category, setCategory] = useState(['business', 'politics', 'sports']);
+
+
+
   return (
     <NavigationContainer>
     <Tab.Navigator>
@@ -23,12 +30,12 @@ export default function App() {
             tabBarIcon: (props) => (
               <Icon type='feather' name='home' color={props.color} />
             ),
-          }}/>
+          }} factScore={factScore} sentiment={sentiment} category={category}/>
       <Tab.Screen name="Settings" component={Settings} options={{
             tabBarIcon: (props) => (
               <Icon type='feather' name='dollar-sign' color={props.color} />
             ),
-          }} />
+          }} factScore={factScore} sentiment={sentiment} category={category}/>
     </Tab.Navigator>
     </NavigationContainer>
   

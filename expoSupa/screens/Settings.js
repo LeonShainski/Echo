@@ -4,18 +4,25 @@ import { createClient } from '@supabase/supabase-js'
 import { useEffect, useState } from 'react';
 import 'react-native-url-polyfill/auto';
 import { Card, Title, Paragraph } from 'react-native-paper'
+import { Icon } from '@rneui/themed';
 
-
-const supabaseUrl = 'https://vsaxkocxddahwxlbzkjj.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzYXhrb2N4ZGRhaHd4bGJ6a2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjM3MjU2MjYsImV4cCI6MTk3OTMwMTYyNn0.mUro088rMzVnGQAZRxtelwUyE-hLLCHJ5VfxoTHLbsM';
-const supabase = createClient(supabaseUrl, supabaseKey)
 
 function Settings() {
-  const [articles, setArticles] = useState(() => fetchArticles());
+  const [factScore, setFactScore] = useState(50);
+  const [sentiment, setSentiment] = useState(['happy', 'sad', 'informational']);
+  const [category, setCategory] = useState(['business', 'politics', 'sports']);
+  
 
+  
   async function fetchArticles() {
 
-    const artList = await supabase.from('articles').select('*');
+    const artList = await supabase
+    .from('articles')
+    .select()
+    .gte(factScore, 'fact_score')
+    .in('category', category)
+    .in('sentiment', sentiment)
+
 
     arts = [];
 
@@ -29,7 +36,6 @@ function Settings() {
       arts.push(artobj);
 
     }
-    setArticles(arts);
 
   }
 
