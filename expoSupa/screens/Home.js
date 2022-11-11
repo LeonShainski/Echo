@@ -18,11 +18,11 @@ function Home() {
 
 
     const [factScore, setFactScore] = useState(0.5);
-    const [usedSentiment, setUsedSentiment] = useState(['Happy', 'Sad', 'Informational']);
-    const [category, setCategory] = useState(['business', 'politics', 'sports']);
+    const [usedSentiment, setUsedSentiment] = useState(['Happy', 'Sad', 'Information']);
+    const [category, setCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
     const [articles, setArticles] = useState(() => fetchArticles());
-    const allCategories = ['business', 'politics', 'sports'];
-    const allSentiments = ['Happy', 'Sad', 'Informational'];
+    const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
+    const allSentiments = ['Happy', 'Sad', 'Information'];
     const sleep = ms => new Promise(
         resolve => setTimeout(resolve, ms)
       );
