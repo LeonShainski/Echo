@@ -9,10 +9,10 @@ function ArticleList(props) {
 return (
 <View>
       
-      <FlatList data={props.articles} renderItem={(itemData) => {
+      <FlatList data={props.articles}  renderItem={(itemData) => {
         if (itemData.item.img !== ""){
           return (
-          <Card>
+          <Card style={styles.article} >
             <Card.Content>
               <Title>{itemData.item.title}</Title>
               <Paragraph>{itemData.item.id}</Paragraph>
@@ -40,3 +40,17 @@ return (
 }
 
 export default ArticleList;
+
+const styles = StyleSheet.create({
+  container: {
+      flex: 1,
+      backgroundColor: '#fff',
+  },
+  article: {
+
+      backgroundColor: '##fcf8eb',
+      padding: 5,
+      paddingTop: 20
+  
+    }
+});

@@ -7,12 +7,26 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Article from '../Components/ArticleList';
 import { Icon, Slider } from '@rneui/themed';
 import { CheckBox } from '@rneui/base'
+//Settings popup import \/\/
+import { MenuProvider } from 'react-native-popup-menu';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import PrimaryButton from '../Components/PrimaryButton';
+
+
 
 
 
 const supabaseUrl = 'https://vsaxkocxddahwxlbzkjj.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzYXhrb2N4ZGRhaHd4bGJ6a2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjM3MjU2MjYsImV4cCI6MTk3OTMwMTYyNn0.mUro088rMzVnGQAZRxtelwUyE-hLLCHJ5VfxoTHLbsM';
 const supabase = createClient(supabaseUrl, supabaseKey)
+
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+  } from 'react-native-popup-menu';
+
 
 function Home() {
 
@@ -32,7 +46,7 @@ function Home() {
         const artList = await supabase
             .from('articles')
             .select('*')
-            .gte('id', 1600)
+            .gte('id', 1800)
             .gte('fact_score', factScore)
             .in('category', category)
             .in('sentiment', usedSentiment)
@@ -52,8 +66,34 @@ function Home() {
         setArticles(arts);
     }
 
-    
+    //ASYNC storage operations
+    const readData = async () => {
+        try {
+          const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
+          const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
+      
+          if (storedSentiments !== null) {
+            console.log(storedSentiments);
+            console.log(storedCategories);
+            
+          }
+        } catch (e) {
+          alert('Failed to fetch the input from storage');
+        }
+      }
 
+    const addTask = async(text) => {
+        if (!text) {
+          Alert.alert(null,'No task entered - Please enter a task',);
+        } else {
+          await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(usedSentiment));
+          await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(category));
+          
+          console.log(text);
+        }
+      };
+
+    //Functions to delete and update user selected sentiments
     function deleteSentiment(sentiment) {
         if (usedSentiment.includes(sentiment)) {
 
@@ -66,7 +106,7 @@ function Home() {
    
         
 }
-
+//Function to add sentiment (by user request) to sentiment list in use for article grabbing
 function addSentiment(sentiment){
     var arr = usedSentiment.slice();
     if (!arr.includes(sentiment)){
@@ -99,57 +139,11 @@ function addSentiment(sentiment){
 
 
     return (
+        
+      
         <View>
-            <View>
-                <Text>Factscore</Text>
-                <Text>{Math.floor(factScore * 10)}</Text>
-                <Slider
-                    value={factScore}
-                    onValueChange={setFactScore}
-                    maximumValue={1}
-                    minimumValue={0}
-                    step={.1}
-                    allowTouchTrack
-                    trackStyle={{ height: 5, backgroundColor: 'transparent' }}
-                    thumbStyle={{ height: 20, width: 20, backgroundColor: 'transparent' }}
-                    thumbProps={{
-                        children: (
-                            <Icon
-                                name="circle"
-                                type="font-awesome"
-                                size={20}
-                                reverse
-                                containerStyle={{ bottom: 20, right: 20 }}
-                            />
-                        ),
-                    }}
-                />
-            </View>
-            <View>
-                {allSentiments.map((currSentiment, index) => {
-                    return (
-                        <View key={index}>
-                     <Text> {currSentiment}</Text> 
-                     <Pressable  title={currSentiment} onPress={addSentiment.bind(this, currSentiment)}> 
-                      <View>
-                      
-                       <Text>add</Text>
-                      </View>
-                      </Pressable>
-                      <Pressable  title={currSentiment} onPress={deleteSentiment.bind(this, currSentiment)}> 
-                      <View>
-                      
-                       <Text>remove</Text>
-                      </View>
-                      </Pressable>
-                      </View>
-                    )
-                }
-
-                )}
-            </View>
-
-            <Article articles={articles}></Article>
+            <PrimaryButton onPress={() => readData()}>Reload</PrimaryButton>
+            <Article articles={articles} style={styles.article} onPress={console.log("Pressed Article")}></Article>
         </View>
 
 
@@ -163,6 +157,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    article: {
+        flex:2,
+        backgroundColor: '#f5e8c6',
+        padding: 20
+    
+      }
 });
 
 export default Home;
