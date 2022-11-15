@@ -25,79 +25,24 @@ import RemoveButton from '../Components/RemoveButton';
 
 
 function Settings() {
+  //Fact Score
   const [factScore, setFactScore] = useState(0.5);
+  //Sentiments
   const [sentiment, setSentiment] = useState(['happy', 'sad', 'informational']);
-  const allSentiments = ['Happy', 'Sad', 'Information'];
-  const [input, setInput] = useState('');
   const [usedSentiment, setUsedSentiment] = useState(['Happy', 'Sad', 'Information']);
+  const allSentiments = ['Happy', 'Sad', 'Information'];
+  //Categories
   const [category, setCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
+  const [usedCategory, setUsedCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
   const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
+  //Misc
+  const [input, setInput] = useState('');
 
   /*useEffect(() => {
     readData();
-  }, []);
-
-  const onChangeText = value => setInput(value);
-
-  const onSubmitEditing = () => {
-    if (!input) return;
-
-    saveData(input);
-    setInput('');
-  };*/
-  
-  /*async function fetchArticles() {
-
-    const artList = await supabase
-    .from('articles')
-    .select()
-    .gte(factScore, 'fact_score')
-    .in('category', category)
-    .in('sentiment', sentiment)
-
-
-    arts = [];
-
-    for (const key in artList.data) {
-      const artobj = {
-        id: key,
-        title: artList.data[key].title,
-        img: artList.data[key].img,
-      };
-      console.log(artobj);
-      arts.push(artobj);
-
-    }
-
-
-  }*/
-  
+  }, []);*/
 
   
-
-  /*const addTask = async(text) => {
-    if (!text) {
-      Alert.alert(null,'No task entered\nPlease enter a task',);
-    } else {
-      //const newTasks = [...tasks, {id: uuid.v4(), title: text}];
-      await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(allSentiments));
-      console.log(text);
-      //setTasks(newTasks);
-    }
-  };
-
-  const readData = async () => {
-    try {
-      const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
-  
-      if (storedSentiments !== null) {
-        console.log(storedSentiments);
-        
-      }
-    } catch (e) {
-      alert('Failed to fetch the input from storage');
-    }
-  }*/
 
   //Good version
   const readData = async () => {
@@ -119,19 +64,30 @@ const addTask = async(text) => {
       Alert.alert(null,'No task entered - Please enter a task',);
     } else {
       await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(usedSentiment));
-      await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(category));
+      await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(usedCategory));
       
       console.log(text);
     }
   };
-  function deleteSentiment(sentiment) {
-    if (usedSentiment.includes(sentiment)) {
 
-    
+function deleteSentiment(sentiment) {
+  if (usedSentiment.includes(sentiment)) {
+    console.log("Removing " + sentiment)
     setUsedSentiment((currSentiment) => {
-        return currSentiment.filter((item) => item !== sentiment)
+      return currSentiment.filter((item) => item !== sentiment)
     })
-}}
+  }
+}
+
+function deleteCategory(category) {
+  if (usedCategory.includes(category)) {
+    console.log("Removing " + category)
+    setUsedCategory((currCategory) => {
+      return currCategory.filter((item) => item !== category)
+    })
+  }
+}
+
 function addSentiment(sentiment){
     var arr = usedSentiment.slice();
     if (!arr.includes(sentiment)){
@@ -144,6 +100,19 @@ function addSentiment(sentiment){
     console.log(arr);
    
 }
+function addCategory(category){
+  var categoryArr = usedCategory.slice();
+  if (!categoryArr.includes(category)){
+    categoryArr.push(category)
+    setUsedCategory(categoryArr);
+    console.log('added');
+    console.log(categoryArr);
+  }
+  console.log('not added ');
+  console.log(categoryArr);
+ 
+}
+
 
 
         
@@ -153,8 +122,11 @@ function addSentiment(sentiment){
         return;
     }, [usedSentiment] )
 
-    
-
+    useEffect(() => {
+        
+      console.log(usedCategory);
+      return;
+  }, [usedCategory] )
 
   return (
     <View style={styles.container}>
@@ -186,12 +158,30 @@ function addSentiment(sentiment){
             <View>
                 {allSentiments.map((currSentiment, index) => {
                     return (
-                     <View key={index}>
-                     <Text> {currSentiment}</Text> 
+                     <View key={index} style={{flexDirection:'row'}}>
+                     <Text style={styles.text}> {currSentiment}</Text> 
                      <AdditionButton  title={currSentiment} onPress={addSentiment.bind(this, currSentiment)}> 
                       Add
                      </AdditionButton>
                      <RemoveButton  title={currSentiment} onPress={deleteSentiment.bind(this, currSentiment)}> 
+                      Remove
+                     </RemoveButton>
+                     </View>
+                    )
+                }
+
+                )}
+            </View>
+            <View>
+              <Text style={styles.text}>Categories</Text>
+                {allCategories.map((currCategory, index) => {
+                    return (
+                     <View key={index} style={{flexDirection:'row'}}>
+                     <Text style={styles.text}> {currCategory}</Text> 
+                     <AdditionButton  title={currCategory} onPress={addCategory.bind(this, currCategory)}> 
+                      Add
+                     </AdditionButton>
+                     <RemoveButton  title={currCategory} onPress={deleteCategory.bind(this, currCategory)}> 
                       Remove
                      </RemoveButton>
                      </View>
@@ -206,25 +196,6 @@ function addSentiment(sentiment){
     
   );
 
-  /*<View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>AsyncStorage React Native</Text>
-      </View>
-      <View style={styles.panel}>
-        <Text style={styles.label}>Enter your input here:</Text>
-        <TextInput
-          style={styles.inputField}
-          value={input}
-          placeholder="Enter"
-          onChangeText={onChangeText}
-          onSubmitEditing={onSubmitEditing}
-        />
-        <Text style={styles.text}>Your input is {input}</Text>
-        <Pressable onPress={clearStorage} style={styles.button}>
-          <Text style={styles.buttonText}>Clear Storage</Text>
-        </Pressable>
-      </View>
-    </View>*/
 }
 
 const styles = StyleSheet.create({
@@ -254,7 +225,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    paddingTop: 10,
+    paddingTop: 5,
+    paddingRight: 40
   },
   inputField: {
     backgroundColor: '#fff',
