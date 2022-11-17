@@ -132,12 +132,6 @@ function addSentiment(sentiment){
     console.log(arr);
    
 }
-
-
-    useEffect(() => {
-
-    })
-    
         
     useEffect(() => {
         

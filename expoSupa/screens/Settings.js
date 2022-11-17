@@ -156,11 +156,11 @@ function addCategory(category){
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.safeView}>
     
       <View>
-                <Text>Factscore</Text>
-                <Text>{Math.floor(factScore * 10)}</Text>
+                
+                <Text style={styles.title}> Factscore: {Math.floor(factScore * 10)}</Text>
                 <Slider
                     value={factScore}
                     onValueChange={setFactScore}
@@ -184,6 +184,7 @@ function addCategory(category){
                 />
             </View>
             <View>
+            <Text style={styles.title}>Sentiment</Text>
                 {allSentiments.map((currSentiment, index) => {
                     return (
                      <View key={index} style={{flexDirection:'row'}}>
@@ -203,7 +204,7 @@ function addCategory(category){
             </View>
             <View>
             
-              <Text style={styles.text}>Categories</Text>
+              <Text style={styles.title}>Categories</Text>
                 {allCategories.map((currCategory, index) => {
                     return (
                       
@@ -233,8 +234,10 @@ function addCategory(category){
 
                 )}
             </View>
+            <View style={styles.saveSettingsBtn}>
             <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
             <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
+            </View>
     
     </SafeAreaView>
   );
@@ -242,12 +245,6 @@ function addCategory(category){
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: "center",
-
-  },
   header: {
     width: '100%',
     backgroundColor: '#dcdcdc',
@@ -305,6 +302,24 @@ const styles = StyleSheet.create({
     flexBasis: 100,
     justifyContent: "space-evenly",
     marginVertical: 16
+  },
+  title: {
+    margin: 10,
+    padding: 10,
+    textShadowColor: 'green',
+    textShadowRadius: 0.6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    fontSize: 20
+  },
+  safeView: {
+    flex: 1,
+    backgroundColor: '#f3f7f0',
+    justifyContent: "flex-end",
+  },
+  saveSettingsBtn: {
+    paddingTop: 20,
   }
   
 });
