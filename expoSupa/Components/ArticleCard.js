@@ -9,7 +9,7 @@ import Article from '../screens/Article';
 
 
 function ArticleCard(props) {
-    const itemData = props.itemData;
+    const item = props.item;
     const [clicked, setClicked] = useState(false);
 
 function toggleText(){
@@ -17,7 +17,7 @@ function toggleText(){
     
 }
 function nav(){
-    props.navigation.navigate("Article", {itemData: itemData});
+    props.navigation.navigate("Article", {link: item.link});
   }
 return (
     
@@ -25,18 +25,18 @@ return (
           <Pressable onPress={nav}>
             <Card>
               <Card.Content>
-                <Title>{itemData.item.title}</Title>
+                <Title>{item.title}</Title>
                 <Pressable onPress={toggleText} >
                     <View style={styles.container}>
                   <Paragraph style={clicked? styles.container: styles.container2}>
-                    {itemData.item.summary}
+                    {item.summary}
                   </Paragraph>
                   <Paragraph style={styles.container2}>
                     Expand +
                   </Paragraph></View>
                 </Pressable>
               </Card.Content>
-              <Card.Cover source={(itemData.item.img !== "") ? { uri: itemData.item.img }: require('../assets/Leon_Echo_MediumFullLogoWithPhone_Version1.png') } />
+              <Card.Cover source={(item.img !== "") ? { uri: item.img }: require('../assets/Leon_Echo_MediumFullLogoWithPhone_Version1.png') } />
             </Card>
           </Pressable>
         </View>

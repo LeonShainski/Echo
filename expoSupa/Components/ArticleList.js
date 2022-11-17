@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, ScrollView, FlatList, Pressable } from 'react-n
 import { createClient } from '@supabase/supabase-js'
 import { useEffect, useState } from 'react';
 import ArticleCard from './ArticleCard';
+import { useIsFocused } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import { addSentiment, removeSentiment } from '../store/sentiment';
 
 
 
@@ -17,19 +20,26 @@ function ArticleList(props) {
   // console.log(props.categories);
   // console.log(props.sentiments);
 
-  const [articles, setArticles] = useState(() => fetchArticles(props.factScore, props.sentiments, props.categories));
+  const reduxSentiment = useSelector((state) => state.sentiments.sentiments);
+  const reduxCategory = useSelector((state) => state.categories.categories);
+  console.log("in articlelist")
+  console.log(reduxSentiment);
+  console.log(reduxCategory);
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused()
+
+  const [articles, setArticles] = useState(() => fetchArticles(props.factScore, reduxCategory, reduxSentiment));
 
 
-  async function fetchArticles(factScore, sentiments, categories) {
-
+  async function fetchArticles(factScore, category, sentiment) {
 
     const artList = await supabase
       .from('articles')
       .select('*')
       .gte('id', 1600)
       .gte('fact_score', factScore)
-      .in('category', categories)
-      .in('sentiment', sentiments)
+      .in('category', category)
+      .in('sentiment', sentiment)
       .not('title', 'is', null)
       .limit(100)
 
@@ -53,12 +63,18 @@ function nav(){
 }
 
   
-
+useEffect(() => {
+  fetchArticles(props.factScore, reduxCategory, reduxSentiment);
+  console.log("article list focused")
+  return;
+}, [isFocused]
+)
 
   useEffect(() => {
-    fetchArticles(props.factScore, props.sentiments, props.categories);
+    fetchArticles(props.factScore, reduxCategory, reduxSentiment);
+    console.log("article list updated")
     return;
-  }, [props.factScore, props.categories, props.sentiments]
+  }, [props.factScore, reduxCategory, reduxSentiment]
   )
 
 
@@ -75,7 +91,7 @@ function nav(){
           return (
 
             <View>
-              <ArticleCard itemData={itemData} navigation={props.navigation}/>
+              <ArticleCard item={itemData.item} navigation={props.navigation}/>
             </View>
           );
         

@@ -11,6 +11,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 import Article from './screens/Article';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Provider } from 'react-redux';
+import {store } from './store/store';
 const Tab = createBottomTabNavigator();
 
 const supabaseUrl = 'https://vsaxkocxddahwxlbzkjj.supabase.co'
@@ -31,6 +33,7 @@ function HomeStackScreen(){
         name="Article"
         component={Article}
         options={{ tabBarLabel: 'art' }}
+        
       />
     </HomeStack.Navigator>
   );
@@ -52,6 +55,7 @@ function changeTest(newtest){
 
 
   return (
+    <Provider store={store}>
     <NavigationContainer style={styles.container}>
       <Tab.Navigator>
         <Tab.Screen name="HomeStack" component={HomeStackScreen} options={{
@@ -68,7 +72,7 @@ function changeTest(newtest){
         
       </Tab.Navigator>
     </NavigationContainer>
-
+</Provider>
   )
 }
 const styles = StyleSheet.create({

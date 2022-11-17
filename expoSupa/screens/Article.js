@@ -8,8 +8,10 @@ import { WebView } from 'react-native-webview';
 
 function Article(props) {
 
+    console.log(props);
+
     return  (
-        <WebView source={{ uri: props.route.params.itemData.item.link}}/>
+        <WebView source={{ uri: props.route.params.link}}/>
             )
 }
 
