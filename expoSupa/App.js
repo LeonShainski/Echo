@@ -9,7 +9,6 @@ import  Home  from './screens/Home'
 import  Settings  from './screens/Settings';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
-import TouchableExample from './screens/TouchableExample';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,11 +33,6 @@ export default function App() {
             ),
           }} factScore={factScore} sentiment={sentiment} category={category}/>
       <Tab.Screen name="Settings" component={Settings} options={{
-            tabBarIcon: (props) => (
-              <Icon type='feather' name='dollar-sign' color={props.color} />
-            ),
-          }} factScore={factScore} sentiment={sentiment} category={category}/>
-      <Tab.Screen name="TouchableExample" component={TouchableExample} options={{
             tabBarIcon: (props) => (
               <Icon type='feather' name='dollar-sign' color={props.color} />
             ),
