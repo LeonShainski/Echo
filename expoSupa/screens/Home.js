@@ -42,6 +42,8 @@ function Home() {
       );
 
     async function fetchArticles() {
+
+        //readData();
         
         const artList = await supabase
             .from('articles')
@@ -71,10 +73,21 @@ function Home() {
         try {
           const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
           const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
-      
+          const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
+          
+          let tempSentiment=JSON.parse(storedSentiments);
+          let tempCategory = JSON.parse(storedCategories);
+          setUsedSentiment(tempSentiment);
+          setCategory(tempCategory);
+          setFactScore(storedFactScore);
+          fetchArticles();
           if (storedSentiments !== null) {
-            console.log(storedSentiments);
-            console.log(storedCategories);
+            console.log("Settings reset correctly");
+            //console.log(tempCategory);
+            //console.log(typeof(tempCategory(0)));
+            //console.log(category);
+            //console.log(typeof(category));
+            //console.log("End");
             
           }
         } catch (e) {
@@ -133,6 +146,7 @@ function addSentiment(sentiment){
     }, [usedSentiment] )
 
     useEffect(() => {
+        //readData(); ----THIS RUNS TOO OFTEN, FIND WAY TO ONLY RUN WHEN COMING BACK FROM SETTINGS PAGE
         fetchArticles();
         return;
     }, [factScore, usedSentiment, category])
@@ -143,7 +157,7 @@ function addSentiment(sentiment){
       
         <View>
             <PrimaryButton onPress={() => readData()}>Reload</PrimaryButton>
-            <Article articles={articles} style={styles.article} onPress={console.log("Pressed Article")}></Article>
+            <Article articles={articles} style={styles.article} ></Article>
         </View>
 
 

@@ -8,7 +8,7 @@ function AdditionButton({ children, onPress }) {
       <Pressable
         style={({ pressed }) =>
           pressed
-            ? [styles.buttonInnerContainer, styles.pressed]
+            ? [styles.buttonInnerContainerPressed, styles.pressed]
             : styles.buttonInnerContainer
         }
         onPress={onPress}
@@ -30,6 +30,12 @@ const styles = StyleSheet.create({
   },
   buttonInnerContainer: {
     backgroundColor: Colors.additionColor,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    elevation: 2,
+  },
+  buttonInnerContainerPressed: {
+    backgroundColor: Colors.addPressedDownColor,
     paddingVertical: 8,
     paddingHorizontal: 16,
     elevation: 2,

@@ -1,24 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, FlatList, TextInput, Pressable } from 'react-native';
-import { createClient } from '@supabase/supabase-js'
-import { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, FlatList, TextInput, Pressable, Switch, Animated, SafeAreaView } from 'react-native';
+import { useEffect, useState, useRef  } from 'react';
 import 'react-native-url-polyfill/auto';
 import { Card, Title, Paragraph } from 'react-native-paper'
 import { Icon, Slider } from '@rneui/themed';
-import { MenuProvider } from 'react-native-popup-menu';
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from 'react-native-popup-menu';
 import PrimaryButton from '../Components/PrimaryButton';
-import BasicExample from './TouchableExample';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Importing Buttons
 import AdditionButton from '../Components/AdditionButton';
 import RemoveButton from '../Components/RemoveButton';
+
+//Importing switch
+//import settingsSwitch from '../Components/settingsSwitch';
 
 
 
@@ -38,10 +32,31 @@ function Settings() {
   //Misc
   const [input, setInput] = useState('');
 
-  /*useEffect(() => {
-    readData();
-  }, []);*/
+  //Switch
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
+  //Animated Status
+  // fadeAnim will be used as the value for opacity. Initial Value: 0
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const fadeIn = () => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true
+    }).start();
+  };
+
+  const fadeOut = () => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true
+    }).start();
+  };
   
 
   //Good version
@@ -49,10 +64,12 @@ function Settings() {
     try {
       const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
       const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
+      const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
   
       if (storedSentiments !== null) {
         console.log(storedSentiments);
         console.log(storedCategories);
+        console.log(storedFactScore);
         
       }
     } catch (e) {
@@ -65,12 +82,15 @@ const addTask = async(text) => {
     } else {
       await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(usedSentiment));
       await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(usedCategory));
+      await AsyncStorage.setItem('FACT_SCORE_STORAGE_KEY', JSON.stringify(factScore));
       
       console.log(text);
+      console.log(factScore);
     }
   };
 
 function deleteSentiment(sentiment) {
+  fadeOut();//Animated View
   if (usedSentiment.includes(sentiment)) {
     console.log("Removing " + sentiment)
     setUsedSentiment((currSentiment) => {
@@ -80,6 +100,7 @@ function deleteSentiment(sentiment) {
 }
 
 function deleteCategory(category) {
+  fadeOut();//Animated View
   if (usedCategory.includes(category)) {
     console.log("Removing " + category)
     setUsedCategory((currCategory) => {
@@ -90,11 +111,15 @@ function deleteCategory(category) {
 
 function addSentiment(sentiment){
     var arr = usedSentiment.slice();
+    fadeIn();//Animated View
     if (!arr.includes(sentiment)){
     arr.push(sentiment)
     setUsedSentiment(arr);
     console.log('added');
     console.log(arr);
+      if (sentiment == 'happy') {
+
+      }
     }
     console.log('not added ');
     console.log(arr);
@@ -102,6 +127,7 @@ function addSentiment(sentiment){
 }
 function addCategory(category){
   var categoryArr = usedCategory.slice();
+  fadeIn();//Animated View
   if (!categoryArr.includes(category)){
     categoryArr.push(category)
     setUsedCategory(categoryArr);
@@ -128,8 +154,10 @@ function addCategory(category){
       return;
   }, [usedCategory] )
 
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+    
       <View>
                 <Text>Factscore</Text>
                 <Text>{Math.floor(factScore * 10)}</Text>
@@ -166,6 +194,7 @@ function addCategory(category){
                      <RemoveButton  title={currSentiment} onPress={deleteSentiment.bind(this, currSentiment)}> 
                       Remove
                      </RemoveButton>
+                     
                      </View>
                     )
                 }
@@ -173,10 +202,24 @@ function addCategory(category){
                 )}
             </View>
             <View>
+            
               <Text style={styles.text}>Categories</Text>
                 {allCategories.map((currCategory, index) => {
                     return (
+                      
                      <View key={index} style={{flexDirection:'row'}}>
+                      <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
+                        key={index}
+                        style={[
+                          styles.fadingContainer,
+                          {
+                          // Bind opacity to animated value
+                          opacity: fadeAnim
+                          }
+                          ]}
+                        >
+                        <Text style={styles.fadingText}>{index}</Text>
+                      </Animated.View>
                      <Text style={styles.text}> {currCategory}</Text> 
                      <AdditionButton  title={currCategory} onPress={addCategory.bind(this, currCategory)}> 
                       Add
@@ -192,8 +235,8 @@ function addCategory(category){
             </View>
             <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
             <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
-    </View>
     
+    </SafeAreaView>
   );
 
 }
@@ -202,6 +245,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    justifyContent: "center",
+
   },
   header: {
     width: '100%',
@@ -248,6 +293,18 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: '#444',
+  },
+  fadingContainer: {
+    padding: 2,
+    backgroundColor: "powderblue"
+  },
+  fadingText: {
+    fontSize: 20
+  },
+  buttonRow: {
+    flexBasis: 100,
+    justifyContent: "space-evenly",
+    marginVertical: 16
   }
   
 });

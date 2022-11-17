@@ -5,7 +5,9 @@ const Colors = {
     primary800: '#3b021f',
     accent500: '#ddb52f',
     additionColor: '#009933',
-    removeColor: '#ff3300'
+    removeColor: '#ff3300',
+    addPressedDownColor: '#e3ffd9',
+    removePressedDownColor: '#ffd3d1'
   };
   
   export default Colors;
