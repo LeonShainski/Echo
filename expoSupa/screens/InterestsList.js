@@ -15,60 +15,17 @@ import RemoveButton from '../Components/RemoveButton';
 //import settingsSwitch from '../Components/settingsSwitch';
 
 
-
-class InterestsList extends Component {
-  constructor() {
-    super();
-    this.state = {
-       listKeys: [
-      {key: 'Entertainment', switch : false},
-      {key: 'Sport', switch : false},
-      {key: 'Business', switch : false},
-      {key: 'Politics', switch : false},
-      {key: 'Tech', switch : false},
-
-    ]
-    }
-  }
-
-  setSwitchValue = (val, ind) => {
-      const tempData = _.cloneDeep(this.state.listKeys);
-      tempData[ind].switch = val;
-      this.setState({ listKeys: tempData });
-      console.log(ind);
-  }
-
-  listItem = ({item, index}) => (
-    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-      <Text style={styles.item}>{item.key}</Text>
-      <Switch
-        onValueChange={(value) => this.setSwitchValue(value, index)}
-        value={item.switch}
-      />
-    </View>
-  );
-
-  render() {
-    return (
-      <FlatList
-        data={this.state.listKeys}
-        renderItem={this.listItem}
-      />
-    );
-  }
-}
-
 function Settings() {
   //Fact Score
   const [factScore, setFactScore] = useState(0.5);
   //Sentiments
-  const [sentiment, setSentiment] = useState(['happy', 'sad', 'informational']);
-  const [usedSentiment, setUsedSentiment] = useState(['Happy', 'Sad', 'Information']);
-  const allSentiments = ['Happy', 'Sad', 'Information'];
+  //const [sentiment, setSentiment] = useState(['happy', 'sad', 'informational']);
+  const [usedSentiment, setUsedSentiment] = useState([]);
+  //const allSentiments = ['Happy', 'Sad', 'Information'];
   //Categories
-  const [category, setCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
-  const [usedCategory, setUsedCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
-  const allCategories = ['business', 'politics', 'sport', 'tech', 'entertainment'];
+  //const [category, setCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
+  const [usedCategory, setUsedCategory] = useState([]);
+  //const allCategories = ['business', 'politics', 'sport', 'tech', 'entertainment'];
   //Misc
   const [input, setInput] = useState('');
 
@@ -107,7 +64,7 @@ function Settings() {
   // fadeAnim will be used as the value for opacity. Initial Value: 0
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  const [data, setData] = React.useState([
+  const [sentimentList, setSentimentList] = React.useState([
     {
         index: 1,
         isEnable:'false',
@@ -126,30 +83,94 @@ function Settings() {
 
 ]);
 
-function toggleSwitch2(value, index){
+const [categoryList, setCategoryList] = React.useState([
+  {
+      index: 1,
+      isEnable:'false',
+      title: 'business',
+  },
+  {
+      index: 2,
+      isEnable:'false',
+      title: 'politics',
+  },
+  {
+      index: 3,
+      isEnable:'false',
+      title: "sport",
+  },
+  {
+    index: 4,
+    isEnable:'false',
+    title: "tech",
+  },
+  {
+    index: 5,
+    isEnable:'false',
+    title: "entertainment",
+  },
 
-  const newData = [...data];
+]);
+
+function toggleSwitchSentiment(value, index){
+
+  const newData = [...sentimentList];
   newData[index].isEnable = value;
-  setData(newData);
+  setSentimentList(newData);
   console.log(newData[index]['isEnable']);
+  console.log(newData[index]['title']);
+  if (newData[index]['isEnable']) {
+    addSentiment(newData[index]['title']);
+  } else {
+    deleteSentiment(newData[index]['title']);
+  }
+  
 
 }
 
-function Item({item, index}) {
+function ItemSentiment({item, index}) {
   return (
       <View style={{flexDirection:'row'}}>
           
           <Switch    
               
               value={item.isEnable || false} // change here
-              onValueChange={(value) => toggleSwitch2(value, index) } // change here
+              onValueChange={(value) => toggleSwitchSentiment(value, index) } // change here
           />
           <Text style={styles.text}> {item.title} </Text> 
       </View>
   )
 } 
 
+function toggleSwitchCategory(value, index){
+
+  const newData = [...categoryList];
+  newData[index].isEnable = value;
+  setCategoryList(newData);
+  console.log(newData[index]['isEnable']);
+  console.log(newData[index]['title']);
+  if (newData[index]['isEnable']) {
+    addCategory(newData[index]['title']);
+  } else {
+    deleteCategory(newData[index]['title']);
+  }
   
+
+}
+
+function ItemCategory({item, index}) {
+  return (
+      <View style={{flexDirection:'row'}}>
+          
+          <Switch    
+              
+              value={item.isEnable || false} // change here
+              onValueChange={(value) => toggleSwitchCategory(value, index) } // change here
+          />
+          <Text style={styles.text}> {item.title} </Text> 
+      </View>
+  )
+} 
 
   const fadeIn = () => {
     // Will change fadeAnim value to 1 in 5 seconds
@@ -297,87 +318,19 @@ function addCategory(category){
             </View>
             <View>
             <Text style={styles.title}>Sentiment</Text>
-                {allSentiments.map((currSentiment, index) => {
-                    return (
-                     <View key={index} style={{flexDirection:'row'}}>
-                      <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
-                        key={index}
-                        style={[
-                          styles.fadingContainer,
-                          {
-                          // Bind opacity to animated value
-                          opacity: fadeAnim
-                          },
-                          usedSentiment.includes(currSentiment) ? styles.included : styles.notIncluded
-                          ]}
-                        >
-                        <Text style={styles.fadingText}></Text>
-                      </Animated.View>
-                     <Text style={styles.text}> {currSentiment}</Text> 
-                     <AdditionButton  title={currSentiment} onPress={addSentiment.bind(this, currSentiment)}> 
-                      Add
-                     </AdditionButton>
-                     <RemoveButton  title={currSentiment} onPress={deleteSentiment.bind(this, currSentiment)}> 
-                      Remove
-                     </RemoveButton>
-                     
-                     </View>
-                    )
-
-                    
-                }
-
-                )}
+            <FlatList
+                data = {sentimentList}
+                keyExtractor = {ItemSentiment => ItemSentiment.id}
+                renderItem = {({ item, index }) => <ItemSentiment item={item} index={index} /> } // send `item` as prop
+                />
             </View>
             <View>
-            
-              <Text style={styles.title}>Categories</Text>
-                {allCategories.map((currCategory, index) => {
-                    return (
-                      
-                     <View key={index} style={{flexDirection:'row'}}>
-                      <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
-                        key={index}
-                        style={[
-                          styles.fadingContainer,
-                          {
-                          // Bind opacity to animated value
-                          opacity: fadeAnim
-                          },
-                          usedCategory.includes(currCategory) ? styles.included : styles.notIncluded
-                          ]}
-                        >
-                        <Text style={styles.fadingText}></Text>
-                      </Animated.View>
-                     <Text style={styles.text}> {currCategory}</Text> 
-                     <AdditionButton  title={currCategory} onPress={addCategory.bind(this, currCategory)}> 
-                      Add
-                     </AdditionButton>
-                     <RemoveButton  title={currCategory} onPress={deleteCategory.bind(this, currCategory)}> 
-                      Remove
-                     </RemoveButton>
-                     <Switch
-                     text={index}
-                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                     title={currCategory}
-                     thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                     onValueChange={toggleSwitch}
-                     value={isEnabled}
-                     />
-                     
-                     
-                     </View>
-                    )
-                }
-
-                )}
-                
-                <FlatList
-                
-                data = {data}
-                keyExtractor = {item => item.id}
-                renderItem = {({ item, index }) => <Item item={item} index={index} /> } // send `item` as prop
-            />
+            <Text style={styles.title}>Category</Text>
+              <FlatList
+                data = {categoryList}
+                keyExtractor = {ItemCategory => ItemCategory.id}
+                renderItem = {({ item, index }) => <ItemCategory item={item} index={index} /> } // send `item` as prop
+                />
             </View>
             
             

@@ -85,7 +85,7 @@ function Home() {
             console.log("Settings reset correctly");
             //console.log(tempCategory);
             //console.log(typeof(tempCategory(0)));
-            //console.log(category);
+            console.log(category);
             //console.log(typeof(category));
             //console.log("End");
             
