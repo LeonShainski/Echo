@@ -11,52 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AdditionButton from '../Components/AdditionButton';
 import RemoveButton from '../Components/RemoveButton';
 
-//Importing switch
-//import settingsSwitch from '../Components/settingsSwitch';
 
-
-
-class InterestsList extends Component {
-  constructor() {
-    super();
-    this.state = {
-       listKeys: [
-      {key: 'Entertainment', switch : false},
-      {key: 'Sport', switch : false},
-      {key: 'Business', switch : false},
-      {key: 'Politics', switch : false},
-      {key: 'Tech', switch : false},
-
-    ]
-    }
-  }
-
-  setSwitchValue = (val, ind) => {
-      const tempData = _.cloneDeep(this.state.listKeys);
-      tempData[ind].switch = val;
-      this.setState({ listKeys: tempData });
-      console.log(ind);
-  }
-
-  listItem = ({item, index}) => (
-    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-      <Text style={styles.item}>{item.key}</Text>
-      <Switch
-        onValueChange={(value) => this.setSwitchValue(value, index)}
-        value={item.switch}
-      />
-    </View>
-  );
-
-  render() {
-    return (
-      <FlatList
-        data={this.state.listKeys}
-        renderItem={this.listItem}
-      />
-    );
-  }
-}
 
 function Settings() {
   //Fact Score
@@ -72,84 +27,11 @@ function Settings() {
   //Misc
   const [input, setInput] = useState('');
 
-  //Switch
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  
-
-  //TEST ARRAY
-  /*var testArr = [{
-    "sentiment":"testHappy",
-    isEnabled: false,
-  },{
-    "sentiment":"testSad",
-    isEnabled: false,
-  },{
-  }
-  ] 
-
-  {testArr.map((item, index) => (
-                      <View key={index}>
-                        <Switch
-                          trackColor={{ false: "#767577", true: "#81b0ff" }}
-                          thumbColor={item.isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                          ios_backgroundColor="#3e3e3e"
-                          onValueChange={toggleSwitch}
-                          value={item.isEnabled}
-                         />             
-                       </View>
-                   ))}
-    PORTENTIAL IMPLEMENTAITON
-  */
 
   //Animated Status
   // fadeAnim will be used as the value for opacity. Initial Value: 0
   const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  const [data, setData] = React.useState([
-    {
-        index: 1,
-        isEnable:'false',
-        title: 'Happy',
-    },
-    {
-        index: 2,
-        isEnable:'false',
-        title: 'Sad',
-    },
-    {
-        index: 3,
-        isEnable:'false',
-        title: "Information",
-    },
-
-]);
-
-function toggleSwitch2(value, index){
-
-  const newData = [...data];
-  newData[index].isEnable = value;
-  setData(newData);
-  console.log(newData[index]['isEnable']);
-
-}
-
-function Item({item, index}) {
-  return (
-      <View style={{flexDirection:'row'}}>
-          
-          <Switch    
-              
-              value={item.isEnable || false} // change here
-              onValueChange={(value) => toggleSwitch2(value, index) } // change here
-          />
-          <Text style={styles.text}> {item.title} </Text> 
-      </View>
-  )
-} 
-
-  
 
   const fadeIn = () => {
     // Will change fadeAnim value to 1 in 5 seconds
@@ -356,14 +238,7 @@ function addCategory(category){
                      <RemoveButton  title={currCategory} onPress={deleteCategory.bind(this, currCategory)}> 
                       Remove
                      </RemoveButton>
-                     <Switch
-                     text={index}
-                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                     title={currCategory}
-                     thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                     onValueChange={toggleSwitch}
-                     value={isEnabled}
-                     />
+                     
                      
                      
                      </View>
@@ -372,12 +247,7 @@ function addCategory(category){
 
                 )}
                 
-                <FlatList
                 
-                data = {data}
-                keyExtractor = {item => item.id}
-                renderItem = {({ item, index }) => <Item item={item} index={index} /> } // send `item` as prop
-            />
             </View>
             
             
