@@ -9,10 +9,14 @@ import Home from './screens/Home';
 import Settings from './screens/Settings';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
+
 import Article from './screens/Article';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 import {store } from './store/store';
+
+import InterestsList from './screens/InterestsList';
+
 const Tab = createBottomTabNavigator();
 
 const supabaseUrl = 'https://vsaxkocxddahwxlbzkjj.supabase.co'
@@ -55,6 +59,7 @@ function changeTest(newtest){
 
 
   return (
+
     <Provider store={store}>
     <NavigationContainer style={styles.container}>
       <Tab.Navigator>
@@ -69,8 +74,14 @@ function changeTest(newtest){
           ),
           
         }} />
+        <Tab.Screen name="InterestList" component={InterestsList} options={{
+            tabBarIcon: (props) => (
+              <Icon type='feather' name='dollar-sign' color={props.color} />
+            ),
+          }} factScore={factScore} sentiment={sentiment} category={category}/>
         
       </Tab.Navigator>
+
     </NavigationContainer>
 </Provider>
   )

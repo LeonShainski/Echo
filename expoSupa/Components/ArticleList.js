@@ -12,6 +12,7 @@ import { addSentiment, removeSentiment } from '../store/sentiment';
 function ArticleList(props) {
 
 
+
   const supabaseUrl = 'https://vsaxkocxddahwxlbzkjj.supabase.co'
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzYXhrb2N4ZGRhaHd4bGJ6a2pqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjM3MjU2MjYsImV4cCI6MTk3OTMwMTYyNn0.mUro088rMzVnGQAZRxtelwUyE-hLLCHJ5VfxoTHLbsM';
   const supabase = createClient(supabaseUrl, supabaseKey)
@@ -103,6 +104,7 @@ useEffect(() => {
   )
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -118,3 +120,4 @@ const styles = StyleSheet.create({
 });
 
 export default ArticleList;
+

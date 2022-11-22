@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View} from 'react-native';
 import { useEffect, useState } from 'react';
-import ArticleList from '../Components/ArticleList';
 
+import ArticleList from '../Components/ArticleList';
 
 
 
@@ -37,6 +37,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    article: {
+        flex:2,
+        backgroundColor: '#f5e8c6',
+        padding: 20
+    
+      }
 });
 
 export default Home;
