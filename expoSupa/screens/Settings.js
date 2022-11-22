@@ -143,6 +143,11 @@ function addCategory(category){
     }, [usedSentiment] )
 
     useEffect(() => {
+      fadeIn();
+      return;
+  })
+
+    useEffect(() => {
         
       console.log(usedCategory);
       return;
