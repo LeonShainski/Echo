@@ -78,7 +78,7 @@ function changeTest(newtest){
             tabBarIcon: (props) => (
               <Icon type='feather' name='dollar-sign' color={props.color} />
             ),
-          }} factScore={factScore} sentiment={sentiment} category={category}/>
+          }} />
         
       </Tab.Navigator>
 

@@ -35,9 +35,9 @@ function Settings(props) {
   //Categories
   const [category, setCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
   const [usedCategory, setUsedCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
-  const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
+  //const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
   //Misc
-  const [input, setInput] = useState('');
+  //const [input, setInput] = useState('');
 
   /*useEffect(() => {
     readData();
@@ -50,7 +50,7 @@ function Settings(props) {
   
 
   //Good version
-  const readData = async () => {
+  /*const readData = async () => {
     try {
       const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
       const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
@@ -150,7 +150,7 @@ useEffect(() => {
       return;
   }, [usedCategory] )
 
-  return (
+  /*return (
     <View style={styles.container}>
       <View>
                 <FactScore factScore={factScore} setFactScore={setFactScore}/>
@@ -164,7 +164,7 @@ useEffect(() => {
             <PrimaryButton onPress={() => addNewSentiment()}>add sent</PrimaryButton>
             <PrimaryButton onPress={() => deleteSentiment()}>del sent</PrimaryButton>
     </View>
-    
+  );*/
 
   const allCategories = ['business', 'politics', 'sport', 'tech', 'entertainment'];
   //Misc
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: '#444',
-  }
+  },
 
   fadingContainer: {
     padding: 2,
