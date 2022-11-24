@@ -50,13 +50,6 @@ function HomeStackScreen(){
 
 export default function App() {
 
-  const [test, setTest] = useState('hello');
-  const [test2, setTest2] = useState('2');
-
-function changeTest(newtest){
-  setTest(newtest);
-}
-
 
   return (
 
