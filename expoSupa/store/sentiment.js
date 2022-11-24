@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const sentimentSlice = createSlice({
     name: 'sentiment',
     initialState: {
-        sentiments: []
+        sentiments: ['Happy', 'Sad', 'Information']
     },
     reducers: {
         addSentiment: (state, action) => {

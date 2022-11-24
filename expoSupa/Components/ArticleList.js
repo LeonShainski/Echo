@@ -77,7 +77,10 @@ function ArticleList(props) {
         title: artList.data[key].title,
         img: artList.data[key].img,
         summary: artList.data[key].summary,
-        link: artList.data[key].link
+        link: artList.data[key].link,
+        factScore: artList.data[key].fact_score,
+        sentiment: artList.data[key].sentiment,
+        category: artList.data[key].category
       };
       arts.push(artobj);
     }
