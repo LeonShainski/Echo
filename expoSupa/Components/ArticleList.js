@@ -82,8 +82,8 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       <View>
-        <Pressable onPress={nav}>
-          <Text>THING</Text>
+        <Pressable onPress={nav} >
+          <Text style={styles.topText}>OPEN ALPHA</Text>
         </Pressable>
       </View>
 
@@ -91,8 +91,8 @@ useEffect(() => {
         
           return (
 
-            <View>
-              <ArticleCard item={itemData.item} navigation={props.navigation}/>
+            <View style={styles.container2}>
+              <ArticleCard item={itemData.item} navigation={props.navigation} style={styles.article}/>
             </View>
           );
         
@@ -112,11 +112,20 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   container2: {
-    flex: 1,
-    backgroundColor: '#fff',
+   backgroundColor: '#f5e8c6',
     padding: 10,
-    height: 70
+    
+
   },
+  topText: {
+    justifyContent:'center'
+  },
+  article: {
+    borderColor: '#cbf5f2',
+    borderWidth: 1
+    
+  }
+
 });
 
 export default ArticleList;

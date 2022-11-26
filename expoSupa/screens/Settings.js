@@ -37,7 +37,9 @@ function Settings(props) {
   const [usedCategory, setUsedCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
   //const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
   //Misc
-  //const [input, setInput] = useState('');
+  
+  
+  const [simplifiedSettingsSelected, toggleSettings] = useState('false'); //For toggling between settings options
 
   /*useEffect(() => {
     readData();
@@ -193,6 +195,14 @@ useEffect(() => {
       useNativeDriver: true
     }).start();
   };
+
+  //Function to toggleSettings (in the const declared above) along with executing other code
+  const toggleSettingsView = (value) => {
+    
+    toggleSettings(value);
+    console.log(simplifiedSettingsSelected);
+
+  }
   
 
   //Good version
@@ -201,11 +211,13 @@ useEffect(() => {
       const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
       const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
       const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
+      const storedSettingsView= await AsyncStorage.getItem('SETTINGS_VIEW_STORAGE_KEY');
   
       if (storedSentiments !== null) {
         console.log(storedSentiments);
         console.log(storedCategories);
         console.log(storedFactScore);
+        console.log(storedSettingsView);
         
       }
     } catch (e) {
@@ -219,9 +231,12 @@ const addTask = async(text) => {
       await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(usedSentiment));
       await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(usedCategory));
       await AsyncStorage.setItem('FACT_SCORE_STORAGE_KEY', JSON.stringify(factScore));
+      await AsyncStorage.setItem('SETTINGS_VIEW_STORAGE_KEY', JSON.stringify(simplifiedSettingsSelected));
+
       
       console.log(text);
       console.log(factScore);
+      console.log(simplifiedSettingsSelected);
     }
   };
 
@@ -326,7 +341,7 @@ function addCategory(category){
                 />
             </View>
             <View>
-            <Text style={styles.title}>Sentiment</Text>
+            <Text style={styles.title}>Sentiment</Text>``
                 {allSentiments.map((currSentiment, index) => {
                     return (
                      <View key={index} style={{flexDirection:'row'}}>
@@ -402,6 +417,13 @@ function addCategory(category){
             <View style={styles.saveSettingsBtn}>
             <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
             <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSettingsView}
+              value={simplifiedSettingsSelected}
+            />
             </View>
     
     </SafeAreaView>

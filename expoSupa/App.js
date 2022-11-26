@@ -17,6 +17,8 @@ import {store } from './store/store';
 
 import InterestsList from './screens/InterestsList';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Tab = createBottomTabNavigator();
 
 const supabaseUrl = 'https://vsaxkocxddahwxlbzkjj.supabase.co'
@@ -24,6 +26,8 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 const HomeStack = createNativeStackNavigator();
+
+
 
 function HomeStackScreen(){
   return (
@@ -52,14 +56,42 @@ export default function App() {
 
   const [test, setTest] = useState('hello');
   const [test2, setTest2] = useState('2');
+  let testVar;
 
 function changeTest(newtest){
   setTest(newtest);
 }
 
+  const readData = async () => {
+    try {
+      const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
+      const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
+      const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
+      const storedSettingsView= await AsyncStorage.getItem('SETTINGS_VIEW_STORAGE_KEY');
 
+      if (storedSentiments !== null) {
+        console.log(storedSentiments);
+        console.log(storedCategories);
+        console.log(storedFactScore);
+        console.log(storedSettingsView);
+        testVar = storedSettingsView;
+        console.log('HEY LOOK HERE HEY LOOK HERE');
+        console.log(testVar);
+        
+        
+      }
+    } catch (e) {
+      alert('Failed to fetch the input from storage');
+    }
+  }
+
+  useEffect(() => {
+    readData();
+  }, []);
+  //storedSettingsView ? Settings : InterestsList
+  
   return (
-
+    
     <Provider store={store}>
     <NavigationContainer style={styles.container}>
       <Tab.Navigator>
@@ -68,22 +100,19 @@ function changeTest(newtest){
             <Icon type='feather' name='home' color={props.color} />
           ), headerShown:false, tabBarLabel: 'Home'
         }} />
-        <Tab.Screen name="Settings" component={Settings} options={{
+        <Tab.Screen name="Settings" component={InterestsList} options={{
           tabBarIcon: (props) => (
             <Icon type='feather' name='home' color={props.color} />
           ),
           
         }} />
-        <Tab.Screen name="InterestList" component={InterestsList} options={{
-            tabBarIcon: (props) => (
-              <Icon type='feather' name='dollar-sign' color={props.color} />
-            ),
-          }} />
+        
         
       </Tab.Navigator>
 
     </NavigationContainer>
 </Provider>
+
   )
 }
 const styles = StyleSheet.create({
