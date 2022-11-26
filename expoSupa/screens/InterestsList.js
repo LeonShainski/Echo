@@ -486,7 +486,7 @@ function addCategory(category){
 
             </RadioButton.Group>
             
-            </View>
+            </View> 
 
             <View style={styles.saveSettingsBtn}>
             <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
