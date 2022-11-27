@@ -17,6 +17,9 @@ import {store } from './store/store';
 
 import InterestsList from './screens/InterestsList';
 
+import About from './screens/About';
+import Favorites from './screens/Favorites';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
@@ -40,6 +43,12 @@ function HomeStackScreen(){
       <HomeStack.Screen
         name="Article"
         component={Article}
+        options={{ tabBarLabel: 'art' }}
+        
+      />
+      <HomeStack.Screen
+        name="About"
+        component={About}
         options={{ tabBarLabel: 'art' }}
         
       />
@@ -104,7 +113,13 @@ function changeTest(newtest){
         }} />
         <Tab.Screen name="Settings" component={InterestsList} options={{
           tabBarIcon: (props) => (
-            <Icon type='feather' name='home' color={props.color} />
+            <Icon type='feather' name='settings' color={props.color} />
+          ),
+          
+        }} />
+        <Tab.Screen name="Favorites" component={Favorites} options={{
+          tabBarIcon: (props) => (
+            <Icon type='feather' name='star' color={props.color} />
           ),
           
         }} />

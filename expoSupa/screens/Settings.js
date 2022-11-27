@@ -12,6 +12,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { addSentiment, removeSentiment } from '../store/sentiment';
 
+import { Image } from 'react-native-paper';
+
 //Importing Buttons
 import AdditionButton from '../Components/AdditionButton';
 import RemoveButton from '../Components/RemoveButton';
@@ -200,11 +202,13 @@ function Settings(props) {
       <FactScore/>
       <Sentiment />
       <Category />
-
+      
     
       <View>
-                
+      
+      
                 <Text style={styles.title}> Factscore: {Math.floor(factScore * 10)}</Text>
+                
                 <Slider
                     value={factScore}
                     onValueChange={setFactScore}

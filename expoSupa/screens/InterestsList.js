@@ -294,7 +294,7 @@ function addCategory(category){
   if (simplifiedSettingsSelected) {
     return (
       <SafeAreaView style={styles.safeView}>
-      
+        <ScrollView>
         <View>
                   
                   <Text style={styles.title}> Factscore: {Math.floor(factScore * 10)}</Text>
@@ -397,6 +397,9 @@ function addCategory(category){
               <View style={styles.saveSettingsBtn}>
               <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
               <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
+              </View>
+              <View style={styles.simplifiedViewToggle }>
+                <Text style={styles.title}>Simplified View: </Text>
               <Switch
                 trackColor={{ false: "#767577", true: "#81b0ff" }}
                 thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
@@ -407,7 +410,7 @@ function addCategory(category){
                 value={simplifiedSettingsSelected}
               />
               </View>
-              <View style={{ flexDirection: 'row', alignContent: 'center', borderColor: '#000000', borderWidth: 2 }}>
+              <View style={{ flexDirection: 'row', alignContent: 'center'}}>
             
               <RadioButton.Group onValueChange={value => setLocationHandler(value)} value={location} >
                     <RadioButton.Item label="EST" value="EST" />
@@ -418,17 +421,60 @@ function addCategory(category){
               
               </View>
               
-      
+              </ScrollView>
       </SafeAreaView>
     );
   } else {
   return (
     <SafeAreaView style={styles.safeView}>
-    <ScrollView>
+    <ScrollView >
     
-      <View>
+      <View style={styles.simplifiedViewToggle}>
+      <Text style={styles.title}>Simplified View:</Text>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSettingsView}
+              value={simplifiedSettingsSelected}
+              style={{paddingTop: 60}}
+              
+            />
                 
-                <Text style={styles.title}> Factscore: {Math.floor(factScore * 10)}</Text>
+                
+            </View>
+            <View>
+            <Text style={styles.title}>Sentiment</Text>
+            <FlatList
+                data = {sentimentList}
+                style={{ paddingLeft: 50}}
+                keyExtractor = {ItemSentiment => ItemSentiment.id}
+                renderItem = {({ item, index }) => <ItemSentiment item={item} index={index} /> } // send `item` as prop
+                />
+            </View>
+            <View>
+            <Text style={styles.title}>Category</Text>
+              <FlatList
+                data = {categoryList}
+                style={{ paddingLeft: 50}}
+                keyExtractor = {ItemCategory => ItemCategory.id}
+                renderItem = {({ item, index }) => <ItemCategory item={item} index={index} /> } // send `item` as prop
+                />
+            </View>
+            
+            <Text style={styles.title}>Location</Text>
+            <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+            
+            <RadioButton.Group onValueChange={value => setLocationHandler(value)} value={location} >
+                  <RadioButton.Item label="EST" value="EST" style={{ paddingLeft: 50}}/>
+                  <RadioButton.Item label="PST" value="PST" style={{ paddingLeft: 50}}/>
+                  <RadioButton.Item label="CET" value="CET" style={{ paddingLeft: 50}}/>
+
+            </RadioButton.Group>
+            
+            </View> 
+
+            <Text style={styles.title}> Factscore: {Math.floor(factScore * 10)}</Text>
                 <Slider
                     value={factScore}
                     onValueChange={setFactScore}
@@ -451,42 +497,6 @@ function addCategory(category){
                         ),
                     }}
                 />
-            </View>
-            <View>
-            <Text style={styles.title}>Sentiment</Text>
-            <FlatList
-                data = {sentimentList}
-                keyExtractor = {ItemSentiment => ItemSentiment.id}
-                renderItem = {({ item, index }) => <ItemSentiment item={item} index={index} /> } // send `item` as prop
-                />
-            </View>
-            <View>
-            <Text style={styles.title}>Category</Text>
-              <FlatList
-                data = {categoryList}
-                keyExtractor = {ItemCategory => ItemCategory.id}
-                renderItem = {({ item, index }) => <ItemCategory item={item} index={index} /> } // send `item` as prop
-                />
-            </View>
-            <Text>Simplified View:</Text>
-            <Switch
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSettingsView}
-              value={simplifiedSettingsSelected}
-            />
-            <Text style={styles.title}>Location</Text>
-            <View style={{ flexDirection: 'row', alignContent: 'center', borderColor: '#000000', borderWidth: 2 }}>
-            
-            <RadioButton.Group onValueChange={value => setLocationHandler(value)} value={location} >
-                  <RadioButton.Item label="EST" value="EST" />
-                  <RadioButton.Item label="PST" value="PST" />
-                  <RadioButton.Item label="CET" value="CET" />
-
-            </RadioButton.Group>
-            
-            </View> 
 
             <View style={styles.saveSettingsBtn}>
             <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
@@ -514,6 +524,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#333',
     fontWeight: 'bold',
+    
+  },
+  settingsSwitches: {
+    alignContent:'center',
+    textAlign: 'right',
+    justifyContent: 'center'
   },
   panel: {
     paddingTop: 10,
@@ -565,12 +581,11 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: 10,
-    padding: 10,
+    paddingTop: 30,
+    paddingBottom: 10,
     textShadowColor: 'green',
     textShadowRadius: 0.6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
+
     fontSize: 20
   },
   safeView: {
@@ -581,6 +596,12 @@ const styles = StyleSheet.create({
   saveSettingsBtn: {
     padding: 20,
     flexDirection:'row'
+  },
+  simplifiedViewToggle: {
+    padding: 0,
+    flexDirection:'row',
+    alignContent: 'flex-end'
+
   },
   notIncluded : {
     backgroundColor: 'red'
