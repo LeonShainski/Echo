@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const categorySlice = createSlice({
     name: 'category',
     initialState: {
-        categories: ['business', 'politics', 'sports', 'tech', 'entertainment', 'store']
+        categories: ['business', 'politics', 'sports', 'tech', 'entertainment']
     },
     reducers: {
         addCategory: (state, action) => {

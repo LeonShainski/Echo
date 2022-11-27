@@ -54,6 +54,7 @@ function HomeStackScreen(){
 
 export default function App() {
 
+
   const [test, setTest] = useState('hello');
   const [test2, setTest2] = useState('2');
   let testVar;
@@ -90,6 +91,7 @@ function changeTest(newtest){
   }, []);
   //storedSettingsView ? Settings : InterestsList
   
+
   return (
     
     <Provider store={store}>

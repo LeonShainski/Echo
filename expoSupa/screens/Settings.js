@@ -1,31 +1,27 @@
-
-
 import FactScore from '../Components/FactScore';
 import Sentiment from '../Components/Sentiment';
 import Category from '../Components/Category';
-
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView, FlatList, TextInput, Pressable, Switch, Animated, SafeAreaView } from 'react-native';
-import React, { useEffect, useState, useRef, Component  } from 'react';
+import React, { useEffect, useState, useRef, Component } from 'react';
 import 'react-native-url-polyfill/auto';
 import { Card, Title, Paragraph } from 'react-native-paper'
 import { Icon, Slider } from '@rneui/themed';
 import PrimaryButton from '../Components/PrimaryButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { addSentiment, removeSentiment } from '../store/sentiment';
 
 //Importing Buttons
 import AdditionButton from '../Components/AdditionButton';
 import RemoveButton from '../Components/RemoveButton';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { addSentiment, removeSentiment } from '../store/sentiment';
 
 
 
 
 function Settings(props) {
-
+/*
   //Fact Score
   const [factScore, setFactScore] = useState(0.5);
   //Sentiments
@@ -41,132 +37,12 @@ function Settings(props) {
   
   const [simplifiedSettingsSelected, toggleSettings] = useState('false'); //For toggling between settings options
 
-  /*useEffect(() => {
+  useEffect(() => {
     readData();
-  }, []);*/
+  }, []);
 
-  const reduxSentiment = useSelector((state) => state.sentiments.sentiments)
-  console.log(reduxSentiment);
   const dispatch = useDispatch();
 
-  
-
-  //Good version
-  /*const readData = async () => {
-    try {
-      const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
-      const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
-  
-      if (storedSentiments !== null) {
-        //console.log(storedSentiments);
-       // console.log(storedCategories);
-        
-      }
-    } catch (e) {
-      alert('Failed to fetch the input from storage');
-    }
-  }
-const addTask = async(text) => {
-    if (!text) {
-      Alert.alert(null,'No task entered - Please enter a task',);
-    } else {
-      await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(usedSentiment));
-      await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(usedCategory));
-      
-      console.log(text);
-    }
-  };
-
-function deleteSentiment(sentiment) {
-  
-  const inSentiment = reduxSentiment.includes(sentiment);
-  if (inSentiment){
-    dispatch(removeSentiment(sentiment));
-    console.log('removed');
-    //console.log(reduxSentiment);
-    }
-    else{
-    console.log('not added ');
-    //console.log(reduxSentiment);
-    }
-  
-   
-}
-
-function deleteCategory(category) {
-  if (usedCategory.includes(category)) {
-    console.log("Removing " + category)
-    setUsedCategory((currCategory) => {
-      return currCategory.filter((item) => item !== category)
-    })
-  }
-}
-
-function addNewSentiment(sentiment){
-  
-  const inSentiment = reduxSentiment.includes(sentiment);
-   
-    if (!inSentiment){
-    dispatch(addSentiment(sentiment))
-    console.log('added');
-    //console.log(reduxSentiment);
-    }
-    else{
-    console.log('not added ');
-    //console.log(reduxSentiment);
-    }
-}
-function addCategory(category){
-  var categoryArr = usedCategory.slice();
-  if (!categoryArr.includes(category)){
-    categoryArr.push(category)
-    setUsedCategory(categoryArr);
-    console.log('added');
-    //console.log(categoryArr);
-  }
-  console.log('not added ');
-  //console.log(categoryArr);
- 
-}
-
-function goToHome(){
-  props.navigation.navigate('Home');
-}
-
-useEffect(() => {
-        
-  console.log('updated');
-  return;
-}, [reduxSentiment] )
-
-        
-    useEffect(() => {
-        
-        //console.log(usedSentiment);
-        return;
-    }, [usedSentiment] )
-
-    useEffect(() => {
-        
-      //console.log(usedCategory);
-      return;
-  }, [usedCategory] )
-
-  /*return (
-    <View style={styles.container}>
-      <View>
-                <FactScore factScore={factScore} setFactScore={setFactScore}/>
-            </View>
-            <Sentiment/>
-            
-           
-            <Category/>
-            <PrimaryButton onPress={goToHome}>Save Settings</PrimaryButton>
-            <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
-            <PrimaryButton onPress={() => addNewSentiment()}>add sent</PrimaryButton>
-            <PrimaryButton onPress={() => deleteSentiment()}>del sent</PrimaryButton>
-    </View>
-  );*/
 
   const allCategories = ['business', 'politics', 'sport', 'tech', 'entertainment'];
   //Misc
@@ -176,6 +52,7 @@ useEffect(() => {
 
   //Animated Status
   // fadeAnim will be used as the value for opacity. Initial Value: 0
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const fadeIn = () => {
@@ -205,28 +82,33 @@ useEffect(() => {
   }
   
 
+
   //Good version
   const readData = async () => {
     try {
       const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
+      const storedCategories = await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
+      const storedFactScore = await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
       const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
       const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
       const storedSettingsView= await AsyncStorage.getItem('SETTINGS_VIEW_STORAGE_KEY');
   
+
       if (storedSentiments !== null) {
         console.log(storedSentiments);
         console.log(storedCategories);
         console.log(storedFactScore);
         console.log(storedSettingsView);
         
+
       }
     } catch (e) {
       alert('Failed to fetch the input from storage');
     }
   }
-const addTask = async(text) => {
+  const addTask = async (text) => {
     if (!text) {
-      Alert.alert(null,'No task entered - Please enter a task',);
+      Alert.alert(null, 'No task entered - Please enter a task',);
     } else {
       await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(usedSentiment));
       await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(usedCategory));
@@ -234,86 +116,91 @@ const addTask = async(text) => {
       await AsyncStorage.setItem('SETTINGS_VIEW_STORAGE_KEY', JSON.stringify(simplifiedSettingsSelected));
 
       
+
       console.log(text);
       console.log(factScore);
       console.log(simplifiedSettingsSelected);
     }
   };
 
-function deleteSentiment(sentiment) {
-  //fadeOut();//Animated View
-  if (usedSentiment.includes(sentiment)) {
-    console.log("Removing " + sentiment)
-    setUsedSentiment((currSentiment) => {
-      return currSentiment.filter((item) => item !== sentiment)
-    })
+  function deleteSentiment(sentiment) {
+    //fadeOut();//Animated View
+    if (usedSentiment.includes(sentiment)) {
+      console.log("Removing " + sentiment)
+      setUsedSentiment((currSentiment) => {
+        return currSentiment.filter((item) => item !== sentiment)
+      })
+    }
   }
-}
 
-function deleteCategory(category) {
-  //fadeOut();//Animated View
-  if (usedCategory.includes(category)) {
-    console.log("Removing " + category)
-    setUsedCategory((currCategory) => {
-      return currCategory.filter((item) => item !== category)
-    })
+  function deleteCategory(category) {
+    //fadeOut();//Animated View
+    if (usedCategory.includes(category)) {
+      console.log("Removing " + category)
+      setUsedCategory((currCategory) => {
+        return currCategory.filter((item) => item !== category)
+      })
+    }
   }
-}
 
-function addSentiment(sentiment){
+  function addSentiment(sentiment) {
     var arr = usedSentiment.slice();
-    fadeIn();//Animated View
-    if (!arr.includes(sentiment)){
-    arr.push(sentiment)
-    setUsedSentiment(arr);
-    console.log('added');
-    console.log(arr);
-    addTask("Updated!");
+    //fadeIn();//Animated View
+    if (!arr.includes(sentiment)) {
+      arr.push(sentiment)
+      setUsedSentiment(arr);
+      console.log('added');
+      console.log(arr);
+      addTask("Updated!");
       if (sentiment == 'happy') {
 
       }
     }
     console.log('not added ');
     console.log(arr);
-   
-}
-function addCategory(category){
-  var categoryArr = usedCategory.slice();
-  fadeIn();//Animated View
-  if (!categoryArr.includes(category)){
-    categoryArr.push(category)
-    setUsedCategory(categoryArr);
-    console.log('added');
-    console.log(categoryArr);
+
   }
-  console.log('not added ');
-  console.log(categoryArr);
+  function addCategory(category) {
+    var categoryArr = usedCategory.slice();
+    //fadeIn();//Animated View
+    if (!categoryArr.includes(category)) {
+      categoryArr.push(category)
+      setUsedCategory(categoryArr);
+      console.log('added');
+      console.log(categoryArr);
+    }
+    console.log('not added ');
+    console.log(categoryArr);
+
+  }
  
-}
 
 
 
-        
-    useEffect(() => {
-        
-        console.log(usedSentiment);
-        return;
-    }, [usedSentiment] )
+  useEffect(() => {
 
-    useEffect(() => {
-      fadeIn();
-      return;
+    console.log(usedSentiment);
+    return;
+  }, [usedSentiment])
+
+  useEffect(() => {
+    //fadeIn();
+    return;
   })
 
-    useEffect(() => {
-        
-      console.log(usedCategory);
-      return;
-  }, [usedCategory] )
+  useEffect(() => {
 
+    console.log(usedCategory);
+    return;
+  }, [usedCategory])
+*/
 
   return (
     <SafeAreaView style={styles.safeView}>
+      <FactScore/>
+      <Sentiment />
+      <Category />
+
     
       <View>
                 
@@ -426,6 +313,7 @@ function addCategory(category){
             />
             </View>
     
+
     </SafeAreaView>
   );
 
@@ -530,8 +418,8 @@ const styles = StyleSheet.create({
     padding: 2,
     backgroundColor: "powderblue",
     width: 30,
-   height: 30,
-   borderRadius: 30/2
+    height: 30,
+    borderRadius: 30 / 2
   },
   fadingText: {
     fontSize: 20
@@ -554,19 +442,21 @@ const styles = StyleSheet.create({
   safeView: {
     flex: 1,
     backgroundColor: '#f3f7f0',
-    justifyContent: "flex-end",
+    
   },
   saveSettingsBtn: {
     paddingTop: 20,
   },
-  notIncluded : {
+  notIncluded: {
     backgroundColor: 'red'
   },
-  included : {
+  included: {
     backgroundColor: 'green'
   }
 
-  
+
 });
 
 export default Settings
+
+
