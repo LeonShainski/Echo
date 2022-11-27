@@ -10,6 +10,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //Importing Buttons
 import AdditionButton from '../Components/AdditionButton';
 import RemoveButton from '../Components/RemoveButton';
+import { render } from 'react-dom';
+import sentiment from '../store/sentiment';
+
+import { RadioButton } from 'react-native-paper';
+
+
 
 //Importing switch
 //import settingsSwitch from '../Components/settingsSwitch';
@@ -21,11 +27,11 @@ function Settings() {
   //Sentiments
   //const [sentiment, setSentiment] = useState(['happy', 'sad', 'informational']);
   const [usedSentiment, setUsedSentiment] = useState([]);
-  //const allSentiments = ['Happy', 'Sad', 'Information'];
+  const allSentiments = ['Happy', 'Sad', 'Information'];
   //Categories
   //const [category, setCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
   const [usedCategory, setUsedCategory] = useState([]);
-  //const allCategories = ['business', 'politics', 'sport', 'tech', 'entertainment'];
+  const allCategories = ['business', 'politics', 'sport', 'tech', 'entertainment'];
   //Misc
   const [input, setInput] = useState('');
 
@@ -33,32 +39,13 @@ function Settings() {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  
+  //Settings Toggle
+  const [simplifiedSettingsSelected, toggleSettings] = useState('false');
 
-  //TEST ARRAY
-  /*var testArr = [{
-    "sentiment":"testHappy",
-    isEnabled: false,
-  },{
-    "sentiment":"testSad",
-    isEnabled: false,
-  },{
-  }
-  ] 
+  //Location selection
+  const [location, setLocation] = React.useState('EST');
 
-  {testArr.map((item, index) => (
-                      <View key={index}>
-                        <Switch
-                          trackColor={{ false: "#767577", true: "#81b0ff" }}
-                          thumbColor={item.isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                          ios_backgroundColor="#3e3e3e"
-                          onValueChange={toggleSwitch}
-                          value={item.isEnabled}
-                         />             
-                       </View>
-                   ))}
-    PORTENTIAL IMPLEMENTAITON
-  */
+  //
 
   //Animated Status
   // fadeAnim will be used as the value for opacity. Initial Value: 0
@@ -112,6 +99,7 @@ const [categoryList, setCategoryList] = React.useState([
 
 ]);
 
+
 function toggleSwitchSentiment(value, index){
 
   const newData = [...sentimentList];
@@ -126,6 +114,18 @@ function toggleSwitchSentiment(value, index){
   }
   
 
+}
+const toggleSettingsView = (value) => {
+    
+  toggleSettings(value);
+  console.log(simplifiedSettingsSelected);
+
+}
+
+const setLocationHandler = (value) => {
+  setLocation(value);
+  console.log("Location set to ", value);
+  addTask("location");
 }
 
 function ItemSentiment({item, index}) {
@@ -197,12 +197,15 @@ function ItemCategory({item, index}) {
       const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
       const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
       const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
+      const storedSettingsView= await AsyncStorage.getItem('SETTINGS_VIEW_STORAGE_KEY');
+      const storedLocation= await AsyncStorage.getItem('LOCATION_STORAGE_KEY');
   
       if (storedSentiments !== null) {
         console.log(storedSentiments);
         console.log(storedCategories);
         console.log(storedFactScore);
-        
+        console.log(storedSettingsView);
+        console.log(storedLocation);
       }
     } catch (e) {
       alert('Failed to fetch the input from storage');
@@ -215,9 +218,12 @@ const addTask = async(text) => {
       await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(usedSentiment));
       await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(usedCategory));
       await AsyncStorage.setItem('FACT_SCORE_STORAGE_KEY', JSON.stringify(factScore));
+      await AsyncStorage.setItem('SETTINGS_VIEW_STORAGE_KEY', JSON.stringify(simplifiedSettingsSelected));
+      await AsyncStorage.setItem('LOCATION_STORAGE_KEY', JSON.stringify(location));
       
       console.log(text);
       console.log(factScore);
+      console.log(location);
     }
   };
 
@@ -250,9 +256,7 @@ function addSentiment(sentiment){
     console.log('added');
     console.log(arr);
     addTask("Updated!");
-      if (sentiment == 'happy') {
-
-      }
+      
     }
     console.log('not added ');
     console.log(arr);
@@ -287,9 +291,140 @@ function addCategory(category){
       return;
   }, [usedCategory] )
 
+  if (simplifiedSettingsSelected) {
+    return (
+      <SafeAreaView style={styles.safeView}>
+      
+        <View>
+                  
+                  <Text style={styles.title}> Factscore: {Math.floor(factScore * 10)}</Text>
+                  <Slider
+                      value={factScore}
+                      onValueChange={setFactScore}
+                      maximumValue={1}
+                      minimumValue={0}
+                      step={.1}
+                      allowTouchTrack
+                      trackStyle={{ height: 5, backgroundColor: 'transparent' }}
+                      thumbStyle={{ height: 20, width: 20, backgroundColor: 'transparent' }}
+                      thumbProps={{
+                          children: (
+                              <Icon
+                                  name="circle"
+                                  type="font-awesome"
+                                  size={20}
+                                  reverse
+                                  containerStyle={{ bottom: 20, right: 20 }}
+                              />
+                          ),
+                      }}
+                  />
+              </View>
+              <View>
+              <Text style={styles.title}>Sentiment</Text>
+                  {allSentiments.map((currSentiment, index) => {
+                      return (
+                       <View key={index} style={{flexDirection:'row'}}>
+                        <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
+                          key={index}
+                          style={[
+                            styles.fadingContainer,
+                            {
+                            // Bind opacity to animated value
+                            opacity: fadeAnim
+                            },
+                            usedSentiment.includes(currSentiment) ? styles.included : styles.notIncluded
+                            ]}
+                          >
+                          <Text style={styles.fadingText}></Text>
+                        </Animated.View>
+                       <Text style={styles.text}> {currSentiment}</Text> 
+                       <AdditionButton  title={currSentiment} onPress={addSentiment.bind(this, currSentiment)}> 
+                        Add
+                       </AdditionButton>
+                       <RemoveButton  title={currSentiment} onPress={deleteSentiment.bind(this, currSentiment)}> 
+                        Remove
+                       </RemoveButton>
+                       
+                       </View>
+                      )
+  
+                      
+                  }
+  
+                  )}
+              </View>
+              <View>
+              
+                <Text style={styles.title}>Categories</Text>
+                  {allCategories.map((currCategory, index) => {
+                      return (
+                        
+                       <View key={index} style={{flexDirection:'row'}}>
+                        <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
+                          key={index}
+                          style={[
+                            styles.fadingContainer,
+                            {
+                            // Bind opacity to animated value
+                            opacity: fadeAnim
+                            },
+                            usedCategory.includes(currCategory) ? styles.included : styles.notIncluded
+                            ]}
+                          >
+                          <Text style={styles.fadingText}></Text>
+                        </Animated.View>
+                       <Text style={styles.text}> {currCategory}</Text> 
+                       <AdditionButton  title={currCategory} onPress={addCategory.bind(this, currCategory)}> 
+                        Add
+                       </AdditionButton>
+                       <RemoveButton  title={currCategory} onPress={deleteCategory.bind(this, currCategory)}> 
+                        Remove
+                       </RemoveButton>
+                       
+                       
+                       
+                       </View>
+                      )
+                  }
+  
+                  )}
+                  
+                  
+              </View>
+              
+              
+              <View style={styles.saveSettingsBtn}>
+              <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
+              <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
+              <Switch
+                trackColor={{ false: "#767577", true: "#81b0ff" }}
+                thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                activeText={'ON'}
+                inActiveText={'Off'}
+                onValueChange={toggleSettingsView}
+                value={simplifiedSettingsSelected}
+              />
+              </View>
+              <View style={{ flexDirection: 'row', alignContent: 'center', borderColor: '#000000', borderWidth: 2 }}>
+            
+              <RadioButton.Group onValueChange={value => setLocationHandler(value)} value={location} >
+                    <RadioButton.Item label="EST" value="EST" />
+                    <RadioButton.Item label="PST" value="PST" />
+                    <RadioButton.Item label="CET" value="CET" />
 
+              </RadioButton.Group>
+              
+              </View>
+              
+      
+      </SafeAreaView>
+    );
+  } else {
   return (
     <SafeAreaView style={styles.safeView}>
+    <ScrollView>
     
       <View>
                 
@@ -306,6 +441,7 @@ function addCategory(category){
                     thumbProps={{
                         children: (
                             <Icon
+                                
                                 name="circle"
                                 type="font-awesome"
                                 size={20}
@@ -332,16 +468,37 @@ function addCategory(category){
                 renderItem = {({ item, index }) => <ItemCategory item={item} index={index} /> } // send `item` as prop
                 />
             </View>
+            <Text>Simplified View:</Text>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSettingsView}
+              value={simplifiedSettingsSelected}
+            />
+            <Text style={styles.title}>Location</Text>
+            <View style={{ flexDirection: 'row', alignContent: 'center', borderColor: '#000000', borderWidth: 2 }}>
             
+            <RadioButton.Group onValueChange={value => setLocationHandler(value)} value={location} >
+                  <RadioButton.Item label="EST" value="EST" />
+                  <RadioButton.Item label="PST" value="PST" />
+                  <RadioButton.Item label="CET" value="CET" />
+
+            </RadioButton.Group>
             
+            </View> 
+
             <View style={styles.saveSettingsBtn}>
             <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
             <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
+            
             </View>
-    
+            
+            
+    </ScrollView>
     </SafeAreaView>
-  );
-
+  );}
+                  
 }
 
 const styles = StyleSheet.create({
@@ -422,7 +579,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   saveSettingsBtn: {
-    paddingTop: 20,
+    padding: 20,
+    flexDirection:'row'
   },
   notIncluded : {
     backgroundColor: 'red'

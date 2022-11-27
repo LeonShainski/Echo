@@ -125,10 +125,16 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
+      <View>
+        <Pressable onPress={nav} >
+          <Text style={styles.topText}>OPEN ALPHA</Text>
+        </Pressable>
+      </View>
+
       <FlatList data={articles} renderItem={(itemData) => {
           return (
-            <View>
-              <ArticleCard itemdata={itemData} navigation={props.navigation}/>
+            <View style={styles.container2}>
+              <ArticleCard item={itemData.item} navigation={props.navigation} style={styles.article}/>
             </View>
           );
       }} alwaysBounceVertical={false} />
@@ -144,11 +150,20 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   container2: {
-    flex: 1,
-    backgroundColor: '#fff',
+   backgroundColor: '#f5e8c6',
     padding: 10,
-    height: 70
+    
+
   },
+  topText: {
+    justifyContent:'center'
+  },
+  article: {
+    borderColor: '#cbf5f2',
+    borderWidth: 1
+    
+  }
+
 });
 
 export default ArticleList;

@@ -33,7 +33,9 @@ function Settings(props) {
   const [usedCategory, setUsedCategory] = useState(['business', 'politics', 'sport', 'tech', 'entertainment']);
   //const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
   //Misc
-  //const [input, setInput] = useState('');
+  
+  
+  const [simplifiedSettingsSelected, toggleSettings] = useState('false'); //For toggling between settings options
 
   useEffect(() => {
     readData();
@@ -50,38 +52,54 @@ function Settings(props) {
 
   //Animated Status
   // fadeAnim will be used as the value for opacity. Initial Value: 0
-  // const fadeAnim = useRef(new Animated.Value(0)).current;
 
-     const fadeIn = () => {
-      // Will change fadeAnim value to 1 in 5 seconds
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true
-      }).start();
-    }; */
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  /*   const fadeOut = () => {
-      // Will change fadeAnim value to 0 in 3 seconds
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true
-      }).start();
-    }; */
+  const fadeIn = () => {
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true
+    }).start();
+  };
 
-/* 
+  const fadeOut = () => {
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true
+    }).start();
+  };
+
+  //Function to toggleSettings (in the const declared above) along with executing other code
+  const toggleSettingsView = (value) => {
+    
+    toggleSettings(value);
+    console.log(simplifiedSettingsSelected);
+
+  }
+  
+
+
   //Good version
   const readData = async () => {
     try {
       const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
       const storedCategories = await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
       const storedFactScore = await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
+      const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
+      const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
+      const storedSettingsView= await AsyncStorage.getItem('SETTINGS_VIEW_STORAGE_KEY');
+  
 
       if (storedSentiments !== null) {
         console.log(storedSentiments);
         console.log(storedCategories);
         console.log(storedFactScore);
+        console.log(storedSettingsView);
+        
 
       }
     } catch (e) {
@@ -95,9 +113,13 @@ function Settings(props) {
       await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(usedSentiment));
       await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(usedCategory));
       await AsyncStorage.setItem('FACT_SCORE_STORAGE_KEY', JSON.stringify(factScore));
+      await AsyncStorage.setItem('SETTINGS_VIEW_STORAGE_KEY', JSON.stringify(simplifiedSettingsSelected));
+
+      
 
       console.log(text);
       console.log(factScore);
+      console.log(simplifiedSettingsSelected);
     }
   };
 
@@ -178,6 +200,120 @@ function Settings(props) {
       <FactScore/>
       <Sentiment />
       <Category />
+
+    
+      <View>
+                
+                <Text style={styles.title}> Factscore: {Math.floor(factScore * 10)}</Text>
+                <Slider
+                    value={factScore}
+                    onValueChange={setFactScore}
+                    maximumValue={1}
+                    minimumValue={0}
+                    step={.1}
+                    allowTouchTrack
+                    trackStyle={{ height: 5, backgroundColor: 'transparent' }}
+                    thumbStyle={{ height: 20, width: 20, backgroundColor: 'transparent' }}
+                    thumbProps={{
+                        children: (
+                            <Icon
+                                name="circle"
+                                type="font-awesome"
+                                size={20}
+                                reverse
+                                containerStyle={{ bottom: 20, right: 20 }}
+                            />
+                        ),
+                    }}
+                />
+            </View>
+            <View>
+            <Text style={styles.title}>Sentiment</Text>``
+                {allSentiments.map((currSentiment, index) => {
+                    return (
+                     <View key={index} style={{flexDirection:'row'}}>
+                      <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
+                        key={index}
+                        style={[
+                          styles.fadingContainer,
+                          {
+                          // Bind opacity to animated value
+                          opacity: fadeAnim
+                          },
+                          usedSentiment.includes(currSentiment) ? styles.included : styles.notIncluded
+                          ]}
+                        >
+                        <Text style={styles.fadingText}></Text>
+                      </Animated.View>
+                     <Text style={styles.text}> {currSentiment}</Text> 
+                     <AdditionButton  title={currSentiment} onPress={addSentiment.bind(this, currSentiment)}> 
+                      Add
+                     </AdditionButton>
+                     <RemoveButton  title={currSentiment} onPress={deleteSentiment.bind(this, currSentiment)}> 
+                      Remove
+                     </RemoveButton>
+                     
+                     </View>
+                    )
+
+                    
+                }
+
+                )}
+            </View>
+            <View>
+            
+              <Text style={styles.title}>Categories</Text>
+                {allCategories.map((currCategory, index) => {
+                    return (
+                      
+                     <View key={index} style={{flexDirection:'row'}}>
+                      <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
+                        key={index}
+                        style={[
+                          styles.fadingContainer,
+                          {
+                          // Bind opacity to animated value
+                          opacity: fadeAnim
+                          },
+                          usedCategory.includes(currCategory) ? styles.included : styles.notIncluded
+                          ]}
+                        >
+                        <Text style={styles.fadingText}></Text>
+                      </Animated.View>
+                     <Text style={styles.text}> {currCategory}</Text> 
+                     <AdditionButton  title={currCategory} onPress={addCategory.bind(this, currCategory)}> 
+                      Add
+                     </AdditionButton>
+                     <RemoveButton  title={currCategory} onPress={deleteCategory.bind(this, currCategory)}> 
+                      Remove
+                     </RemoveButton>
+                     
+                     
+                     
+                     </View>
+                    )
+                }
+
+                )}
+                
+                
+            </View>
+            
+            
+            <View style={styles.saveSettingsBtn}>
+            <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
+            <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSettingsView}
+              value={simplifiedSettingsSelected}
+            />
+            </View>
+    
+
     </SafeAreaView>
   );
 
@@ -324,121 +460,3 @@ const styles = StyleSheet.create({
 export default Settings
 
 
-
-//old - john nov 23
-  //Good version
-  /*const readData = async () => {
-    try {
-      const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
-      const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
-  
-      if (storedSentiments !== null) {
-        //console.log(storedSentiments);
-       // console.log(storedCategories);
-        
-      }
-    } catch (e) {
-      alert('Failed to fetch the input from storage');
-    }
-  }
-const addTask = async(text) => {
-    if (!text) {
-      Alert.alert(null,'No task entered - Please enter a task',);
-    } else {
-      await AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(usedSentiment));
-      await AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(usedCategory));
-      
-      console.log(text);
-    }
-  };
-
-function deleteSentiment(sentiment) {
-  
-  const inSentiment = reduxSentiment.includes(sentiment);
-  if (inSentiment){
-    dispatch(removeSentiment(sentiment));
-    console.log('removed');
-    //console.log(reduxSentiment);
-    }
-    else{
-    console.log('not added ');
-    //console.log(reduxSentiment);
-    }
-  
-   
-}
-
-function deleteCategory(category) {
-  if (usedCategory.includes(category)) {
-    console.log("Removing " + category)
-    setUsedCategory((currCategory) => {
-      return currCategory.filter((item) => item !== category)
-    })
-  }
-}
-
-function addNewSentiment(sentiment){
-  
-  const inSentiment = reduxSentiment.includes(sentiment);
-   
-    if (!inSentiment){
-    dispatch(addSentiment(sentiment))
-    console.log('added');
-    //console.log(reduxSentiment);
-    }
-    else{
-    console.log('not added ');
-    //console.log(reduxSentiment);
-    }
-}
-function addCategory(category){
-  var categoryArr = usedCategory.slice();
-  if (!categoryArr.includes(category)){
-    categoryArr.push(category)
-    setUsedCategory(categoryArr);
-    console.log('added');
-    //console.log(categoryArr);
-  }
-  console.log('not added ');
-  //console.log(categoryArr);
- 
-}
-
-function goToHome(){
-  props.navigation.navigate('Home');
-}
-
-useEffect(() => {
-        
-  console.log('updated');
-  return;
-}, [reduxSentiment] )
-
-        
-    useEffect(() => {
-        
-        //console.log(usedSentiment);
-        return;
-    }, [usedSentiment] )
-
-    useEffect(() => {
-        
-      //console.log(usedCategory);
-      return;
-  }, [usedCategory] )
-
-  /*return (
-    <View style={styles.container}>
-      <View>
-                <FactScore factScore={factScore} setFactScore={setFactScore}/>
-            </View>
-            <Sentiment/>
-            
-           
-            <Category/>
-            <PrimaryButton onPress={goToHome}>Save Settings</PrimaryButton>
-            <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
-            <PrimaryButton onPress={() => addNewSentiment()}>add sent</PrimaryButton>
-            <PrimaryButton onPress={() => deleteSentiment()}>del sent</PrimaryButton>
-    </View>
-  );*/
