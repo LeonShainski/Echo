@@ -5,7 +5,7 @@ import { Icon } from '@rneui/themed';
 
 function ArticleCard(props) {
   const itemdata = props.itemdata;
-  const item = props.itemdata.item;
+  const item = props.item;
   const [clicked, setClicked] = useState(false);
 
   function toggleText() {

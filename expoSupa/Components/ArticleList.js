@@ -8,6 +8,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addSentiment, removeSentiment } from '../store/sentiment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { Pressable } from 'react-native';
+import { Text } from 'react-native-paper';
+
 
 
 function ArticleList(props) {
