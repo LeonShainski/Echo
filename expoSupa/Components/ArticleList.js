@@ -24,23 +24,30 @@ function ArticleList(props) {
   const reduxSentiment = useSelector((state) => state.sentiments.sentiments);
   const reduxCategory = useSelector((state) => state.categories.categories);
   const reduxFactScore = useSelector((state) => state.factScore.factscore);
+  const reduxLocation = useSelector((state) => state.location.location);
   const isFocused = useIsFocused()
 
     const readData = async () => {
-        try {
-          const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
-          if (storedSentiments !== null) {
+      console.log('read data');  
+      try {
+          const storedSentiments =  JSON.parse(await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY'));
+          if (storedSentiments !== null && storedSentiments !== undefined) {
             console.log('storedSentiments');
             console.log(storedSentiments);
+            for (const s of storedSentiments){
+              
+            }
+            
+            
            
         }
        } catch (e) {
           console.log('Failed to fetch the sentiments from storage');
-
+          console.log(e);
         }
         try {
-            const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
-            if (storedCategories !== null) {
+            const storedCategories= JSON.parse(await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY'));
+            if (storedCategories !== null && storedCategories !== undefined) {
               console.log('storedCategories');
               console.log(storedCategories);
             }
@@ -48,8 +55,9 @@ function ArticleList(props) {
             console.log('Failed to fetch the categories from storage');
           }
           try {
-            const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
-            if (storedFactScore !== null) {
+            const storedFactScore= JSON.parse(await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY'));
+            
+            if (storedFactScore !== null && storedFactScore !== undefined) {
               console.log('storedFactScore');
               console.log(storedFactScore);
               
@@ -57,19 +65,35 @@ function ArticleList(props) {
           } catch (e) {
             console.log('Failed to fetch the factscore from storage');
           }
+          try {
+            const storedLocation= await AsyncStorage.getItem('LOCATION_STORAGE_KEY');
+            if (storedLocation !== null && storedLocation !== undefined) {
+              console.log('storedLocation');
+              console.log(storedLocation);
+              
+            }
+          } catch (e) {
+            console.log('Failed to fetch the location from storage');
+          }
+          
       }
 
 
 
-  async function fetchArticles(factScore, category, sentiment) {
+  async function fetchArticles(factScore, category, sentiment, location) {
 
+    console.log('location');
+    console.log(location);
+    if (location == undefined){
+      location = 'EST'
+    }
     const artList = await supabase
       .from('articles')
       .select('*')
-      .gte('id', 1600)
       .gte('fact_score', (factScore/10))
       .in('category', category)
       .in('sentiment', sentiment)
+      .eq('location', location)
       .not('title', 'is', null)
       .limit(100)
 
@@ -83,10 +107,12 @@ function ArticleList(props) {
         link: artList.data[key].link,
         factScore: artList.data[key].fact_score,
         sentiment: artList.data[key].sentiment,
-        category: artList.data[key].category
+        category: artList.data[key].category,
+        location: artList.data[key].location,
       };
       arts.push(artobj);
     }
+
     setArticles(arts);
   }
 
@@ -105,25 +131,25 @@ useEffect(() => {
 )
   
 useEffect(() => {
-  fetchArticles(reduxFactScore, reduxCategory, reduxSentiment);
+  fetchArticles(reduxFactScore, reduxCategory, reduxSentiment, reduxLocation);
   console.log("article list focused")
   return;
 }, [isFocused]
 )
 
   useEffect(() => {
-    fetchArticles(reduxFactScore, reduxCategory, reduxSentiment);
+    fetchArticles(reduxFactScore, reduxCategory, reduxSentiment,reduxLocation);
     console.log("article list updated")
     AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(reduxCategory));
     AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(reduxSentiment));
     AsyncStorage.setItem('FACT_SCORE_STORAGE_KEY', JSON.stringify(reduxFactScore));
+    AsyncStorage.setItem('LOCATION_STORAGE_KEY', JSON.stringify(reduxLocation));
     sleep(1000);
-    readData();
     return;
-  }, [reduxFactScore, reduxCategory, reduxSentiment]
+  }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation]
   )
 
-  const [articles, setArticles] = useState(() => fetchArticles(reduxFactScore, reduxCategory, reduxSentiment));
+  const [articles, setArticles] = useState(() => fetchArticles(reduxFactScore, reduxCategory, reduxSentiment, reduxLocation));
 
 
   return (

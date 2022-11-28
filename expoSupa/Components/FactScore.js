@@ -8,9 +8,10 @@ import {changeFactScore} from '../store/factscore';
 
 
 function FactScore(props) {
-
-    const [factScore, setFactScore] = useState(5);
+    
     const reduxFactScore = useSelector((state) => state.factScore.factscore);
+    const [factScore, setFactScore] = useState(reduxFactScore);
+    
     console.log('reduxFactScore');
     console.log(reduxFactScore);
     

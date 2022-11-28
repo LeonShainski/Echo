@@ -1,26 +1,19 @@
 
-import { StyleSheet, Text, View, ScrollView, FlatList, TextInput, Pressable, Switch, Animated, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Switch, Animated } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, useState, useRef, Component } from 'react';
+import { useEffect, useRef } from 'react';
 import AdditionButton from './AdditionButton';
 import RemoveButton from './RemoveButton';
 import { addSentiment, removeSentiment } from '../store/sentiment';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function Sentiment() {
+function Sentiment(props) {
 
   const allSentiments = ['Happy', 'Sad', 'Information'];
-
   const reduxSentiment = useSelector((state) => state.sentiments.sentiments);
-  console.log('reduxSentiment');
-  console.log(reduxSentiment);
   const dispatch = useDispatch();
-
-
-
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   async function deleteSentiment(sentiment) {
-
     const inSentiment = reduxSentiment.includes(sentiment);
     if (inSentiment) {
       dispatch(removeSentiment(sentiment));
@@ -36,23 +29,28 @@ function Sentiment() {
   }
 
   async function includeSentiment(sentiment) {
-   
+
     const inSentiment = reduxSentiment.includes(sentiment);
 
     if (!inSentiment) {
-      
       dispatch(addSentiment(sentiment))
       console.log('added');
       fadeIn();
-    
-     
     }
     else {
       console.log('not added ');
-    }return;
+    }
+    return;
   }
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  async function onOffSwitch(sentiment) {
+    const inSentiment = reduxSentiment.includes(sentiment);
+    if (inSentiment) {
+      deleteSentiment(sentiment);
+    } else {
+      includeSentiment(sentiment);
+    }
+  }
 
   const fadeIn = () => {
     // Will change fadeAnim value to 1 in 5 seconds
@@ -77,43 +75,56 @@ function Sentiment() {
     return;
   })
 
+
   return (
     <View>
       <Text style={styles.title}>Sentiment</Text>
       {allSentiments.map((currSentiment, index) => {
-        return (
-          <View key={index} style={{ flexDirection: 'row' }}>
-            <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
-              key={index}
-              style={[
-                styles.fadingContainer,
-                {
-                  // Bind opacity to animated value
-                  opacity: fadeAnim
-                },
-                reduxSentiment.includes(currSentiment) ? styles.included : styles.notIncluded
-              ]}
-            >
-              <Text style={styles.fadingText}></Text>
-            </Animated.View>
-            <Text style={styles.text}> {currSentiment}</Text>
-            <AdditionButton title={currSentiment} onPress={(e) => includeSentiment(currSentiment, e)}>
-              Add
-            </AdditionButton>
-            <RemoveButton title={currSentiment} onPress={(e) => deleteSentiment(currSentiment, e)}>
-              Remove
-            </RemoveButton>
-
-          </View>
-        )
-
-
-      }
-
-      )}</View>
-
+        if (props.simplified) {
+          return (
+            <View key={index} style={{ flexDirection: 'row' }}>
+              <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
+                key={index}
+                style={[
+                  styles.fadingContainer,
+                  {
+                    // Bind opacity to animated value
+                    opacity: fadeAnim
+                  },
+                  reduxSentiment.includes(currSentiment) ? styles.included : styles.notIncluded
+                ]}
+              >
+                <Text style={styles.fadingText}></Text>
+              </Animated.View>
+              <Text style={styles.text}> {currSentiment}</Text>
+              <AdditionButton title={currSentiment} onPress={(e) => includeSentiment(currSentiment, e)}>
+                Add
+              </AdditionButton>
+              <RemoveButton title={currSentiment} onPress={(e) => deleteSentiment(currSentiment, e)}>
+                Remove
+              </RemoveButton>
+            </View>
+          )
+        }
+        else {
+          return (
+            
+                  <View key={index} style={{ flexDirection: 'row' }}>
+                    <Switch
+                      value={reduxSentiment.includes(currSentiment)} // change here
+                      onValueChange={(e) => onOffSwitch(currSentiment, e)} // change here
+                    />
+                    <Text style={styles.text}> {currSentiment} </Text>
+                  </View>
+            
+          )
+        }
+      })}
+    </View>
   )
 }
+
+
 
 
 
