@@ -438,7 +438,7 @@ function addCategory(category){
               onValueChange={toggleSettingsView}
               value={simplifiedSettingsSelected}
               style={{paddingTop: 60}}
-              
+               
             />
                 
                 
