@@ -11,8 +11,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 function Category(props) {
 
   const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
-  const reduxCategory = useSelector((state) => state.categories.categories)
-
+  const reduxCategory = useSelector((state) => state.categories.categories);
+  const [simplified, setSimplified] = useState(props.simplified);
   const dispatch = useDispatch();
 
   //Animated Status
@@ -45,7 +45,7 @@ function Category(props) {
       dispatch(removeCategory(category));
       console.log('removed');
       fadeOut();
-      
+
       //console.log(reduxSentiment);
     }
     else {
@@ -70,6 +70,16 @@ function Category(props) {
     }
   }
 
+  async function onOffSwitch(category){
+    const inCategory = reduxCategory.includes(category);
+    if (inCategory){
+      deleteCategory(category);
+    } else {
+      includeCategory(category);
+  }
+  }
+
+
   useEffect(() => {
     fadeIn();
     return;
@@ -77,39 +87,61 @@ function Category(props) {
 
 
 
-  return (
+  if (simplified){
+    return (
+      <View>
+        <Text style={styles.title}>Categories</Text>
+        {allCategories.map((currCategory, index) => {
+          return (
+            <View key={index} style={{ flexDirection: 'row' }}>
+              <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
+                key={index}
+                style={[
+                  styles.fadingContainer,
+                  {
+                    // Bind opacity to animated value
+                    opacity: fadeAnim
+                  },
+                  reduxCategory.includes(currCategory) ? styles.included : styles.notIncluded
+                ]}
+              >
+                <Text style={styles.fadingText}></Text>
+              </Animated.View>
+              <Text style={styles.text}> {currCategory}</Text>
+              <AdditionButton title={currCategory} onPress={(e) => includeCategory(currCategory, e)}>
+                Add
+              </AdditionButton>
+              <RemoveButton title={currCategory} onPress={(e) => deleteCategory(currCategory, e)}>
+                Remove
+              </RemoveButton>
+            </View>
+          )
+        }
+        )}
+      </View>
+    )
+  } else {
+    return (
+      <View>
+        <Text style={styles.title}>Category</Text>
+        <View>
 
-    <View>
-      <Text style={styles.title}>Categories</Text>
-      {allCategories.map((currCategory, index) => {
-        return (
-          <View key={index} style={{ flexDirection: 'row' }}>
-            <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
-              key={index}
-              style={[
-                styles.fadingContainer,
-                {
-                  // Bind opacity to animated value
-                  opacity: fadeAnim
-                },
-                reduxCategory.includes(currCategory) ? styles.included : styles.notIncluded
-              ]}
-            >
-              <Text style={styles.fadingText}></Text>
-            </Animated.View>
-            <Text style={styles.text}> {currCategory}</Text>
-            <AdditionButton title={currCategory} onPress={(e) => includeCategory(currCategory, e)}>
-              Add
-            </AdditionButton>
-            <RemoveButton title={currCategory} onPress={(e) => deleteCategory(currCategory, e)}>
-              Remove
-            </RemoveButton>
-          </View>
-        )
-      }
-      )}
-    </View>
-  )
+          {allCategories.map((currCategory, index) => {
+            return (
+              <View key={index} style={{ flexDirection: 'row' }}>
+                <Switch
+                  value={reduxCategory.includes(currCategory)} // change here
+                  onValueChange={(e) => onOffSwitch(currCategory, e)} // change here
+                />
+                <Text style={styles.text}> {currCategory} </Text>
+              </View>
+            )
+          })}
+        </View>
+      </View>
+
+    )
+  }
 }
 
 

@@ -64,26 +64,20 @@ function HomeStackScreen(){
 export default function App() {
 
 
-  const [test, setTest] = useState('hello');
-  const [test2, setTest2] = useState('2');
-  let testVar;
-
-function changeTest(newtest){
-  setTest(newtest);
-}
-
   const readData = async () => {
     try {
       const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
       const storedCategories= await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY');
       const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
       const storedSettingsView= await AsyncStorage.getItem('SETTINGS_VIEW_STORAGE_KEY');
+      const storedLocation = await AsyncStorage.getItem('LOCATION_STORAGE_KEY');
 
       if (storedSentiments !== null) {
         console.log(storedSentiments);
         console.log(storedCategories);
         console.log(storedFactScore);
         console.log(storedSettingsView);
+        console.log(storedLocation);
         testVar = storedSettingsView;
         console.log('HEY LOOK HERE HEY LOOK HERE');
         console.log(testVar);
