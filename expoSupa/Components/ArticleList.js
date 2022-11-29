@@ -1,19 +1,20 @@
 import { StyleSheet, View, FlatList } from 'react-native';
 import { createClient } from '@supabase/supabase-js'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import ArticleCard from './ArticleCard';
 import { useIsFocused } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-
-import { addSentiment, removeSentiment } from '../store/sentiment';
+import { setSentiment } from '../store/sentiment';
+import { setCategory } from '../store/category';
+import { changeFactScore } from '../store/factscore';
+import {changeLocation } from '../store/location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import { Pressable } from 'react-native';
-import { Text } from 'react-native-paper';
-
+import { Text, Button } from 'react-native-paper';
 import { Image } from 'react-native-elements';
 import { ImageBackground } from 'react-native';
-import { TouchableHighlight } from 'react-native';
+import { TouchableHighlight, Dimensions } from 'react-native';
+
 
 
 
@@ -30,6 +31,9 @@ function ArticleList(props) {
   const reduxFactScore = useSelector((state) => state.factScore.factscore);
   const reduxLocation = useSelector((state) => state.location.location);
   const isFocused = useIsFocused()
+  const [id, setId] = useState(0);
+  const flatListRef = useRef();
+  
 
     const readData = async () => {
       console.log('read data');  
@@ -38,9 +42,7 @@ function ArticleList(props) {
           if (storedSentiments !== null && storedSentiments !== undefined) {
             console.log('storedSentiments');
             console.log(storedSentiments);
-            for (const s of storedSentiments){
-              
-            }
+            dispatch(setSentiment(storedSentiments));
             
             
            
@@ -54,30 +56,33 @@ function ArticleList(props) {
             if (storedCategories !== null && storedCategories !== undefined) {
               console.log('storedCategories');
               console.log(storedCategories);
+              dispatch(setCategory(storedCategories))
             }
           } catch (e) {
             console.log('Failed to fetch the categories from storage');
           }
           try {
-            const storedFactScore= JSON.parse(await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY'));
+            const storedFactScore= parseInt(await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY'));
             
             if (storedFactScore !== null && storedFactScore !== undefined) {
               console.log('storedFactScore');
               console.log(storedFactScore);
-              
+              dispatch(changeFactScore(storedFactScore));
             }
           } catch (e) {
             console.log('Failed to fetch the factscore from storage');
+            console.log(e);
           }
           try {
             const storedLocation= await AsyncStorage.getItem('LOCATION_STORAGE_KEY');
             if (storedLocation !== null && storedLocation !== undefined) {
               console.log('storedLocation');
               console.log(storedLocation);
-              
+              dispatch(changeLocation(storedLocation));
             }
           } catch (e) {
             console.log('Failed to fetch the location from storage');
+            console.log(e);
           }
           
       }
@@ -86,14 +91,14 @@ function ArticleList(props) {
 
   async function fetchArticles(factScore, category, sentiment, location) {
 
-    console.log('location');
-    console.log(location);
+    
     if (location == undefined){
       location = 'EST'
     }
     const artList = await supabase
       .from('articles')
       .select('*')
+      .gte('id', id)
       .gte('fact_score', (factScore/10))
       .in('category', category)
       .in('sentiment', sentiment)
@@ -116,7 +121,8 @@ function ArticleList(props) {
       };
       arts.push(artobj);
     }
-
+    var end ={id: 0}
+    arts.push(end);
     setArticles(arts);
   }
 
@@ -124,33 +130,44 @@ function nav(){
   props.navigation.navigate("About");
 }
 
-function sleep(ms) {
+async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+async function loadMore(){
+  if (articles.length>99){
+  var s = articles.pop();
+  s = articles.pop();
+  setId(s.id)
+  } else {
+    setId(0);
+  }
+  await sleep(300);
+  flatListRef.current.scrollToIndex({ animated: false, index:0 });
+  return;
+  
+}
+
 
 useEffect(() => {
   readData();
   return;
 }, []
 )
-  
-useEffect(() => {
-  fetchArticles(reduxFactScore, reduxCategory, reduxSentiment, reduxLocation);
-  console.log("article list focused")
-  return;
-}, [isFocused]
-)
+let timeout;
 
   useEffect(() => {
+    
     fetchArticles(reduxFactScore, reduxCategory, reduxSentiment,reduxLocation);
     console.log("article list updated")
     AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(reduxCategory));
     AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(reduxSentiment));
     AsyncStorage.setItem('FACT_SCORE_STORAGE_KEY', JSON.stringify(reduxFactScore));
-    AsyncStorage.setItem('LOCATION_STORAGE_KEY', JSON.stringify(reduxLocation));
-    sleep(1000);
+    AsyncStorage.setItem('LOCATION_STORAGE_KEY', reduxLocation);
+    
     return;
-  }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation]
+    
+  }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation, isFocused, id]
   )
 
 
@@ -191,18 +208,24 @@ useEffect(() => {
       
         
       </Image>
-
-      <FlatList data={articles} renderItem={(itemData) => {
+      
+<View style={styles.container3}>
+      <FlatList  ref={flatListRef} data={articles} renderItem={(itemData) => {
           return (
             <View style={styles.container2}>
-              <ArticleCard item={itemData.item} navigation={props.navigation} style={styles.article}/>
+              <ArticleCard item={itemData.item} navigation={props.navigation} style={styles.article} loadMore={loadMore}/>
             </View>
           );
       }} alwaysBounceVertical={false} />
+      </View>
+      
     </View>
     
   )
 }
+
+let { height } = Dimensions.get("window");
+  console.log(height);
 
 
 const styles = StyleSheet.create({
@@ -223,6 +246,11 @@ const styles = StyleSheet.create({
     
 
   },
+  container3: {
+    height: height - 200,
+     
+ 
+   },
   topText: {
     justifyContent:'center',
     flexDirection: 'column',
@@ -232,6 +260,9 @@ const styles = StyleSheet.create({
     borderColor: '#cbf5f2',
     borderWidth: 1
     
+  },
+  bottomButton:{
+    padding: 30,
   }
 
 });

@@ -22,10 +22,15 @@ function ArticleCard(props) {
 
   }
 
+  function loadMore() {
+    props.loadMore();
 
+  }
+
+if (item.id !=0){
   return (
 
-    <View>
+    <View style={styles.container}>
       <Pressable onPress={nav}>
         <Card>
           <Card.Cover source={(item.img !== "") ? { uri: item.img } : require('../assets/Leon_Echo_MediumFullLogoWithPhone_Version1.png')} />
@@ -65,6 +70,12 @@ function ArticleCard(props) {
 
     </View>
   );
+} else {
+  return (
+    <View>
+      <Button mode="contained" onPress={loadMore}> Load More</Button>
+    </View>)
+}
 }
 
 
