@@ -16,6 +16,9 @@ const sentimentSlice = createSlice({
         removeSentiment:(state, action) =>{
             state.sentiments = state.sentiments.filter((item) => item !== action.payload);
             
+        },
+        setSentiment:(state, action) => {
+            return {...state, sentiments: action.payload};
         }
 
     }
@@ -23,6 +26,7 @@ const sentimentSlice = createSlice({
 
 export const addSentiment = sentimentSlice.actions.addSentiment;
 export const removeSentiment = sentimentSlice.actions.removeSentiment;
+export const setSentiment = sentimentSlice.actions.setSentiment;
 export default sentimentSlice.reducer;
 
 

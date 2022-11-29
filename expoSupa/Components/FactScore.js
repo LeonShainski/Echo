@@ -16,16 +16,18 @@ function FactScore(props) {
     console.log(reduxFactScore);
     
    const dispatch = useDispatch();
-
+let timeout;
     async function changefactscore() {
-   
+        
           dispatch(changeFactScore(factScore));
-          return;
+          
       }
 
-      useEffect(( ) =>{
-        changefactscore();
       
+      useEffect(( ) =>{
+        
+        changefactscore();
+  
     }, [factScore]);
  
 
