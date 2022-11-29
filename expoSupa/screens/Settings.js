@@ -12,6 +12,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { addSentiment, removeSentiment } from '../store/sentiment';
 
+import { Image } from 'react-native-paper';
+
 //Importing Buttons
 import AdditionButton from '../Components/AdditionButton';
 import RemoveButton from '../Components/RemoveButton';
@@ -28,6 +30,121 @@ function Settings(props) {
       <FactScore/>
       <Sentiment />
       <Category />
+    
+      <View>
+      
+      
+                <Text style={styles.title}> Factscore: {Math.floor(factScore * 10)}</Text>
+                
+                <Slider
+                    value={factScore}
+                    onValueChange={setFactScore}
+                    maximumValue={1}
+                    minimumValue={0}
+                    step={.1}
+                    allowTouchTrack
+                    trackStyle={{ height: 5, backgroundColor: 'transparent' }}
+                    thumbStyle={{ height: 20, width: 20, backgroundColor: 'transparent' }}
+                    thumbProps={{
+                        children: (
+                            <Icon
+                                name="circle"
+                                type="font-awesome"
+                                size={20}
+                                reverse
+                                containerStyle={{ bottom: 20, right: 20 }}
+                            />
+                        ),
+                    }}
+                />
+            </View>
+            <View>
+            <Text style={styles.title}>Sentiment</Text>``
+                {allSentiments.map((currSentiment, index) => {
+                    return (
+                     <View key={index} style={{flexDirection:'row'}}>
+                      <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
+                        key={index}
+                        style={[
+                          styles.fadingContainer,
+                          {
+                          // Bind opacity to animated value
+                          opacity: fadeAnim
+                          },
+                          usedSentiment.includes(currSentiment) ? styles.included : styles.notIncluded
+                          ]}
+                        >
+                        <Text style={styles.fadingText}></Text>
+                      </Animated.View>
+                     <Text style={styles.text}> {currSentiment}</Text> 
+                     <AdditionButton  title={currSentiment} onPress={addSentiment.bind(this, currSentiment)}> 
+                      Add
+                     </AdditionButton>
+                     <RemoveButton  title={currSentiment} onPress={deleteSentiment.bind(this, currSentiment)}> 
+                      Remove
+                     </RemoveButton>
+                     
+                     </View>
+                    )
+
+                    
+                }
+
+                )}
+            </View>
+            <View>
+            
+              <Text style={styles.title}>Categories</Text>
+                {allCategories.map((currCategory, index) => {
+                    return (
+                      
+                     <View key={index} style={{flexDirection:'row'}}>
+                      <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
+                        key={index}
+                        style={[
+                          styles.fadingContainer,
+                          {
+                          // Bind opacity to animated value
+                          opacity: fadeAnim
+                          },
+                          usedCategory.includes(currCategory) ? styles.included : styles.notIncluded
+                          ]}
+                        >
+                        <Text style={styles.fadingText}></Text>
+                      </Animated.View>
+                     <Text style={styles.text}> {currCategory}</Text> 
+                     <AdditionButton  title={currCategory} onPress={addCategory.bind(this, currCategory)}> 
+                      Add
+                     </AdditionButton>
+                     <RemoveButton  title={currCategory} onPress={deleteCategory.bind(this, currCategory)}> 
+                      Remove
+                     </RemoveButton>
+                     
+                     
+                     
+                     </View>
+                    )
+                }
+
+                )}
+                
+                
+            </View>
+            
+            
+            <View style={styles.saveSettingsBtn}>
+            <PrimaryButton onPress={() => addTask("Updated!")}>Save Settings</PrimaryButton>
+            <PrimaryButton onPress={() => readData()}>Check Settings For Update</PrimaryButton>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSettingsView}
+              value={simplifiedSettingsSelected}
+            />
+            </View>
+    
+
     </SafeAreaView>
   );
 

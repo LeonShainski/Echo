@@ -39,6 +39,7 @@ function InterestsList() {
     return (
       <SafeAreaView style={styles.safeView}>
         <ScrollView>
+
           <View>
             <Text>Simplified View:</Text>
             <Switch
@@ -98,6 +99,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#333',
     fontWeight: 'bold',
+    
+  },
+  settingsSwitches: {
+    alignContent:'center',
+    textAlign: 'right',
+    justifyContent: 'center'
   },
   panel: {
     paddingTop: 10,
@@ -149,12 +156,11 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: 10,
-    padding: 10,
+    paddingTop: 30,
+    paddingBottom: 10,
     textShadowColor: 'green',
     textShadowRadius: 0.6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
+
     fontSize: 20
   },
   safeView: {
@@ -166,7 +172,17 @@ const styles = StyleSheet.create({
     padding: 20,
     flexDirection: 'row'
   },
-  notIncluded: {
+
+  
+
+  simplifiedViewToggle: {
+    padding: 0,
+    flexDirection:'row',
+    alignContent: 'flex-end'
+
+  },
+
+notIncluded: {
     backgroundColor: 'red'
   },
   included: {

@@ -11,6 +11,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Pressable } from 'react-native';
 import { Text } from 'react-native-paper';
 
+import { Image } from 'react-native-elements';
+import { ImageBackground } from 'react-native';
+import { TouchableHighlight } from 'react-native';
+
 
 
 function ArticleList(props) {
@@ -117,7 +121,7 @@ function ArticleList(props) {
   }
 
 function nav(){
-  props.navigation.navigate("Article");
+  props.navigation.navigate("About");
 }
 
 function sleep(ms) {
@@ -149,16 +153,44 @@ useEffect(() => {
   }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation]
   )
 
+
   const [articles, setArticles] = useState(() => fetchArticles(reduxFactScore, reduxCategory, reduxSentiment, reduxLocation));
+  const image = { uri: "https://i.ibb.co/kqC18S0/echo-gradient-background1.jpg" };
 
 
   return (
-    <View style={styles.container}>
+    
+    <View >
       <View>
         <Pressable onPress={nav} >
           <Text style={styles.topText}>OPEN ALPHA</Text>
+          
         </Pressable>
+        </View>
+      
+      <Image source={image} resizeMode={"stretch"}  style={{ width: '100%', height: 20}}>
+      <View style={styles.container}>
+        
+      <TouchableHighlight onPress={nav}>
+        
+      <Image
+        source={{ uri: 'https://i.ibb.co/DYnBzsG/Leon-Echo-Mediumer-Text-Version1.png' }}//Have echo log pop up really small here (for brand)
+        style={{ width: 60, height: 20,alignContent: 'center', //https://i.ibb.co/4txfbtM/Leon-Echo-Medium-Full-Logo-With-Phone-Version1.png
+        justifyContent: 'center',
+        borderRadius: 1,
+        borderColor: '#000',
+        shadowRadius: 2,
+        shadowColor: '#000'
+        
+        }}
+      />
+      </TouchableHighlight>
+      
+      
       </View>
+      
+        
+      </Image>
 
       <FlatList data={articles} renderItem={(itemData) => {
           return (
@@ -168,15 +200,22 @@ useEffect(() => {
           );
       }} alwaysBounceVertical={false} />
     </View>
+    
   )
 }
 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
     padding: 0,
+    justifyContent: 'center',
+    alignContent: 'center',
+    borderRadius: 1,
+    borderColor: '#000',
+    shadowRadius: 2,
+    shadowColor: '#000',
+    flexDirection: 'row'
+    
   },
   container2: {
    backgroundColor: '#f5e8c6',
@@ -185,7 +224,9 @@ const styles = StyleSheet.create({
 
   },
   topText: {
-    justifyContent:'center'
+    justifyContent:'center',
+    flexDirection: 'column',
+    alignContent: 'center',
   },
   article: {
     borderColor: '#cbf5f2',

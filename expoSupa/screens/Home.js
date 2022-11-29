@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View} from 'react-native';
 import { useEffect, useState } from 'react';
+import { Image } from 'react-native-elements';
 
 import ArticleList from '../Components/ArticleList';
 
@@ -43,7 +44,9 @@ function Home(props) {
       }, []);
     return (
     
-
+        
+      
+        
         <View style={styles.container}>
             <ArticleList factScore={factScore} sentiments={sentiments} categories={categories} navigation={props.navigation} style={styles.article}></ArticleList>
         </View>
