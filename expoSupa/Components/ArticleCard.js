@@ -2,11 +2,13 @@ import { StyleSheet, View, Pressable, Text } from 'react-native';
 import { useState } from 'react';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { Icon } from '@rneui/themed';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function ArticleCard(props) {
   const itemdata = props.itemdata;
   const item = props.item;
   const [clicked, setClicked] = useState(false);
+ 
 
   function toggleText() {
     setClicked(!clicked);
@@ -15,11 +17,43 @@ function ArticleCard(props) {
   function nav() {
     props.navigation.navigate("Article", { link: item.link });
   }
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  const readData = async (item) => {
+    var arrSavedArticles=[]
+    console.log('Reading Article Data');
+    arrSavedArticles =  JSON.parse(await AsyncStorage.getItem('FAV_ARTICLES_STORAGE_KEY'));
+    if (arrSavedArticles==null){
+      console.log('empty!');
+      arrSavedArticles=[]
+      arrSavedArticles.push(item);
+      console.log(arrSavedArticles);
+    } else {
+      console.log("NOT EMPTY!!");
+      arrSavedArticles.push(item);
+    }
+    console.log(arrSavedArticles);
+    //arrSavedArticles.push(item);
+    //arrSavedArticles.push(item);
+    //console.log(arrSavedArticles);
+    console.log("saving!");
+    AsyncStorage.setItem('FAV_ARTICLES_STORAGE_KEY', JSON.stringify(arrSavedArticles));
+    return;
+}
 
 
   function exportArticleInfo() {
-    console.log(item);
-
+    //console.log(item);
+    var storedSentiments = []
+    readData(item)
+    //.then(storedSentiments = readData())
+    //.then(console.log(storedSentiments))
+    //sleep(100000);
+    
+    //console.log(typeof(item));
+    //AsyncStorage.setItem('FAV_ARTICLES_STORAGE_KEY', JSON.stringify(item));
   }
 
 

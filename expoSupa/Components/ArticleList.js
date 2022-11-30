@@ -116,7 +116,6 @@ function ArticleList(props) {
       };
       arts.push(artobj);
     }
-
     setArticles(arts);
   }
 
