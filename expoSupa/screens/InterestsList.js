@@ -62,10 +62,7 @@ function InterestsList() {
             />
           </View>
 
-          <FactScore />
-          <Sentiment simplified={simplifiedSettingsSelected} />
-          <Category simplified={simplifiedSettingsSelected} />
-          <Location />
+          
         </ScrollView>
       </SafeAreaView>
     );
