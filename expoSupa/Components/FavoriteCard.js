@@ -7,6 +7,23 @@ function FavoriteCard(props) {
 
     const item = props.item;
     const [clicked, setClicked] = useState(false);
+    const [expand, setExpand] = useState('expand +');
+    const long = item.summary.length > 155;
+
+    function toggleText() {
+        console.log(long)
+        console.log(item.summary.length)
+        if (long && !clicked){
+            setExpand('   [-]')
+        }
+        if (long && clicked){
+            setExpand('   expand [+]')
+        }
+        if (long){
+        setClicked(!clicked);
+        }
+        
+    }
 
     function toggleText() {
         setClicked(!clicked);
@@ -27,7 +44,7 @@ function FavoriteCard(props) {
             <Card>
                 <Card.Actions>
                     <Pressable onPress={removeFav}>
-                        <Icon name={'star'} />
+                    <Icon type={'font-awesome'} name={'star'} color={'#eff74a'} size={35}/> 
                     </Pressable>
                 </Card.Actions>
                 <Pressable onPress={nav}>
@@ -36,15 +53,15 @@ function FavoriteCard(props) {
                         <Title>{item.title}</Title>
                         <View style={styles.iconContainer}>
                             <View style={styles.iconGroup}>
-                                <Icon name='checkbox-marked-circle-outline' type='material-community' />
+                                <Icon name='checkbox-marked-circle-outline' type='material-community' color='#2bd63c'/>
                                 <Text>  {Math.floor(item.factScore * 100)}%</Text>
                             </View>
                             <View style={styles.iconGroup}>
-                                <Icon name='heart-pulse' type='material-community' />
+                                <Icon name='heart-pulse' type='material-community' color='#e62929'/>
                                 <Text>  {item.sentiment}</Text>
                             </View>
                             <View style={styles.iconGroup}>
-                                <Icon name='newspaper' type='material-community' />
+                                <Icon name='newspaper' type='material-community' color='#1717bf'/>
                                 <Text>  {item.category}</Text>
                             </View>
                         </View>
@@ -54,7 +71,7 @@ function FavoriteCard(props) {
                                     {item.summary}
                                 </Paragraph>
                                 <Paragraph>
-                                    expand +
+                                {long? expand: ''}
                                 </Paragraph>
                             </View>
                         </Pressable>

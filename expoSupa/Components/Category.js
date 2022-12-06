@@ -1,9 +1,8 @@
 
-import { StyleSheet, Text, View, ScrollView, FlatList, TextInput, Pressable, Switch, Animated, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Switch, Animated } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import category, { addCategory, removeCategory } from '../store/category';
-import React, { useEffect, useState, useRef, Component } from 'react';
-
+import { addCategory, removeCategory } from '../store/category';
+import { useEffect, useRef } from 'react';
 import AdditionButton from './AdditionButton';
 import RemoveButton from './RemoveButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,12 +12,46 @@ function Category(props) {
   const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
   const displayCategories = ['Business', 'Politics', 'Sports', 'Tech', 'Humanities'];
   const reduxCategory = useSelector((state) => state.categories.categories);
-  const [simplified, setSimplified] = useState(props.simplified);
   const dispatch = useDispatch();
-
-  //Animated Status
-  // fadeAnim will be used as the value for opacity. Initial Value: 0
   const fadeAnim = useRef(new Animated.Value(0)).current;
+
+
+  async function deleteCategory(category) {
+    const inCategory = reduxCategory.includes(category);
+    if (inCategory) {
+      dispatch(removeCategory(category));
+      fadeOut();
+
+       }
+    else {
+      console.log('not added ');
+    }
+    return;
+  }
+
+  async function includeCategory(category) {
+
+    const inCategory = reduxCategory.includes(category);
+
+    if (!inCategory) {
+      dispatch(addCategory(category))
+      fadeIn();
+     }
+    else {
+      console.log('not added ');
+    }
+    return;
+  }
+
+  async function onOffSwitch(category) {
+    const inCategory = reduxCategory.includes(category);
+    if (inCategory) {
+      deleteCategory(category);
+    } else {
+      includeCategory(category);
+    }
+    return;
+  }
 
   const fadeIn = () => {
     // Will change fadeAnim value to 1 in 5 seconds
@@ -28,6 +61,7 @@ function Category(props) {
       useNativeDriver: true
     }).start();
   };
+
 
   const fadeOut = () => {
     // Will change fadeAnim value to 0 in 3 seconds
@@ -39,62 +73,19 @@ function Category(props) {
   };
 
 
-  async function deleteCategory(category) {
- 
-    const inCategory = reduxCategory.includes(category);
-    if (inCategory) {
-      dispatch(removeCategory(category));
-      console.log('removed');
-      fadeOut();
-
-      //console.log(reduxSentiment);
-    }
-    else {
-      console.log('not added ');
-      //console.log(reduxSentiment);
-    }
-  }
-
-  async function includeCategory(category) {
-
-    const inCategory = reduxCategory.includes(category);
-
-    if (!inCategory) {
-      dispatch(addCategory(category))
-      console.log('added');
-      fadeIn();
-      //console.log(reduxSentiment);
-    }
-    else {
-      console.log('not added ');
-      //console.log(reduxSentiment);
-    }
-  }
-
-  async function onOffSwitch(category){
-    const inCategory = reduxCategory.includes(category);
-    if (inCategory){
-      deleteCategory(category);
-    } else {
-      includeCategory(category);
-  }
-  }
-
-
   useEffect(() => {
     fadeIn();
     return;
   })
 
 
-
-  if (simplified){
-    return (
-      <View>
-        <Text style={styles.title}>Categories</Text>
-        {allCategories.map((currCategory, index) => {
+  return (
+    <View>
+      <Text style={styles.title}>Categories</Text>
+      {allCategories.map((currCategory, index) => {
+        if (props.simplified) {
           return (
-            <View key={index} style={{ flexDirection: 'row', paddingLeft:30 }}>
+            <View key={index} style={{ flexDirection: 'row', paddingLeft: 30 }}>
               <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
                 key={index}
                 style={[
@@ -111,42 +102,38 @@ function Category(props) {
 
               <Text style={styles.text}> {displayCategories[index]}</Text>
 
-              <AdditionButton title={currCategory} onPress={(e) => includeCategory(currCategory, e)}>
+              <AdditionButton title={currCategory} onPress={async (e) => await includeCategory(currCategory, e)}>
                 Add
               </AdditionButton>
-              <RemoveButton title={currCategory} onPress={(e) => deleteCategory(currCategory, e)}>
+              <RemoveButton title={currCategory} onPress={async (e) => await deleteCategory(currCategory, e)}>
                 Remove
               </RemoveButton>
-              
+
             </View>
           )
+        } else {
+          return (
+
+            <View key={index} style={{ flexDirection: 'row', paddingLeft: 30 }}>
+              <Switch
+                value={reduxCategory.includes(currCategory)} // change here
+                onValueChange={(e) => onOffSwitch(currCategory, e)} // change here
+              />
+              <Text style={styles.text}> {displayCategories[index]} </Text>
+            </View>
+          )
+
+
+
+
+
         }
-        )}
-      </View>
-    )
-  } else {
-    return (
-      <View>
-        <Text style={styles.title}>Category</Text>
-        <View>
-
-          {allCategories.map((currCategory, index) => {
-            return (
-              <View key={index} style={{ flexDirection: 'row', paddingLeft: 30 }}>
-                <Switch
-                  value={reduxCategory.includes(currCategory)} // change here
-                  onValueChange={(e) => onOffSwitch(currCategory, e)} // change here
-                />
-                <Text style={styles.text}> {displayCategories[index]} </Text>
-              </View>
-            )
-          })}
-        </View>
-      </View>
-
-    )
-  }
+      }
+      )}
+    </View>
+  )
 }
+
 
 
 
@@ -176,7 +163,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingRight: 40,
     paddingButtom: 40
-    
+
   },
   inputField: {
     backgroundColor: '#fff',
@@ -224,7 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     paddingTop: 5,
     paddingRight: 40,
-    
+
   },
   inputField: {
     backgroundColor: '#fff',

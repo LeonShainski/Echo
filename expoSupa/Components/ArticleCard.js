@@ -13,8 +13,44 @@ function ArticleCard(props) {
   const dispatch = useDispatch();
   const [favorite, setFavorite] = useState(item.favorite);
 
+  const [expand, setExpand] = useState('expand +');
+  var long;
+  var cat = item.category;
+
+  if (cat == 'entertainment') {
+    cat = 'Humanities';
+  }
+  else if (cat == 'business') {
+    cat = 'Business'
+  }
+  else if (cat == 'politics') {
+    cat = 'Politics';
+  }
+  else if (cat == 'sports') {
+    cat = 'Sports';
+  }
+  else if (cat == 'tech') {
+    cat = 'Tech';
+  }
+
+  if (item.summary !== undefined){
+    long = item.summary.length > 155;
+  } else {long = false}
+
+
   function toggleText() {
-    setClicked(!clicked);
+      console.log(long)
+      console.log(item.summary.length)
+      if (long && !clicked){
+          setExpand('[-]')
+      }
+      if (long && clicked){
+          setExpand('expand [+]')
+      }
+      if (long){
+      setClicked(!clicked);
+      }
+      
   }
 
   function nav() {
@@ -44,7 +80,7 @@ function ArticleCard(props) {
         <Card>
           <Card.Actions>
             <Pressable onPress={favorite ? removeFav : addFav}>
-              <Icon name={favorite ? 'star' : 'home'} />
+            <Icon type={'font-awesome'} name={favorite? 'star': 'star-o'} color={favorite? '#dbcb18': 'black'} size={30}/>
             </Pressable>
           </Card.Actions>
           <Pressable onPress={nav}>
@@ -53,16 +89,16 @@ function ArticleCard(props) {
               <Title>{item.title}</Title>
               <View style={styles.iconContainer}>
                 <View style={styles.iconGroup}>
-                  <Icon name='checkbox-marked-circle-outline' type='material-community' />
+                  <Icon name='checkbox-marked-circle-outline' type='material-community' color='#2bd63c' />
                   <Text>  {Math.floor(item.factScore * 100)}%</Text>
                 </View>
                 <View style={styles.iconGroup}>
-                  <Icon name='heart-pulse' type='material-community' />
+                  <Icon name='heart-pulse' type='material-community' color='#e62929'/>
                   <Text>  {item.sentiment}</Text>
                 </View>
                 <View style={styles.iconGroup}>
-                  <Icon name='newspaper' type='material-community' />
-                  <Text>  {item.category}</Text>
+                  <Icon name='newspaper' type='material-community' color='#1717bf'/>
+                  <Text>  {cat}</Text>
                 </View>
               </View>
               <Pressable onPress={toggleText} >
@@ -70,8 +106,8 @@ function ArticleCard(props) {
                   <Paragraph style={clicked ? styles.container : styles.container2}>
                     {item.summary}
                   </Paragraph>
-                  <Paragraph>
-                    expand +
+                  <Paragraph >
+                  {long? expand: ''}
                   </Paragraph>
                 </View>
               </Pressable>

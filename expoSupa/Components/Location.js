@@ -16,10 +16,11 @@ function Location(props) {
     function setLocationHandler(location) {
         dispatch(changeLocation(location));
     }
+    
     useEffect(( ) =>{
         setLocationHandler(location);
-      
     }, [location]);
+
 
     useEffect(( ) =>{
         if (reduxLocation !== undefined)

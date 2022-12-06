@@ -9,7 +9,7 @@ function Home(props) {
 
   return (
     <View style={styles.container}>
-      {isFocused ?<ArticleList navigation={props.navigation} style={styles.article}/> : null}
+      {isFocused ?<ArticleList navigation={props.navigation} /> : null}
     </View>
   );
 }

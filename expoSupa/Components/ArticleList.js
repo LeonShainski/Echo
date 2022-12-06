@@ -35,7 +35,7 @@ function ArticleList(props) {
   const [id, setId] = useState(0);
   const flatListRef = useRef();
 
-
+/* 
   const readData = async () => {
     console.log('read data');
     try {
@@ -54,7 +54,7 @@ function ArticleList(props) {
       if (storedCategories !== null && storedCategories !== undefined) {
         console.log('storedCategories');
         console.log(storedCategories);
-        dispatch(setCategory(storedCategories))
+        dispatch(setCategory(storedCategories));
       }
     } catch (e) {
       console.log('Failed to fetch the categories from storage');
@@ -82,10 +82,11 @@ function ArticleList(props) {
       console.log('Failed to fetch the location from storage');
       console.log(e);
     }
+    return;
 
   }
 
-
+ */
 
   async function fetchArticles(factScore, category, sentiment, location) {
 
@@ -106,23 +107,9 @@ function ArticleList(props) {
     var arts = [];
     for (const key in artList.data) {
       let inFaves = false;
-      var cat = artList.data[key].category;
-      if (cat == 'entertainment') {
-        cat = 'Humanities';
-      }
-      else if (cat == 'business') {
-        cat = 'Business'
-      }
-      else if (cat == 'politics') {
-        cat = 'Politics';
-      }
-      else if (cat == 'sports') {
-        cat = 'Sports';
-      }
-      else if (cat == 'tech') {
-        cat = 'Tech';
-      }
-      if (reduxFavorites.find(x => x.id == artList.data[key].id) != undefined) {
+      
+      
+      if (reduxFavorites!= undefined && reduxFavorites.find(x => x.id == artList.data[key].id) != undefined) {
         inFaves = true;
       }
 
@@ -134,7 +121,7 @@ function ArticleList(props) {
         link: artList.data[key].link,
         factScore: artList.data[key].fact_score,
         sentiment: artList.data[key].sentiment,
-        category: cat,
+        category: artList.data[key].category,
         location: artList.data[key].location,
         favorite: inFaves
       };
@@ -168,7 +155,7 @@ function ArticleList(props) {
   }
 
   useEffect(() => {
-    readData();
+   // readData();
     return;
   }, []
   )
@@ -176,10 +163,6 @@ function ArticleList(props) {
   useEffect(() => {
     fetchArticles(reduxFactScore, reduxCategory, reduxSentiment, reduxLocation);
     console.log("article list updated")
-    AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(reduxCategory));
-    AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(reduxSentiment));
-    AsyncStorage.setItem('FACT_SCORE_STORAGE_KEY', JSON.stringify(reduxFactScore));
-    AsyncStorage.setItem('LOCATION_STORAGE_KEY', reduxLocation);
     sleep(1000);
     return;
   }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation, reduxFavorites, id]
@@ -246,7 +229,7 @@ const styles = StyleSheet.create({
 
   },
   container2: {
-    backgroundColor: '#f5e8c6',
+    backgroundColor: '#dfebf0',
     padding: 10,
   },
   container3: {

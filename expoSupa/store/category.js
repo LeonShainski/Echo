@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
 const categorySlice = createSlice({
     name: 'category',
     initialState: {
@@ -12,8 +13,10 @@ const categorySlice = createSlice({
 
         },
         removeCategory:(state, action) =>{
+            console.log('action.payload', action.payload);
             state.categories = state.categories.filter((item) => item !== action.payload);
-            
+            console.log('state.categories', state.categories);
+           
         },
         setCategory:(state, action) => {
             return {...state, categories: action.payload};

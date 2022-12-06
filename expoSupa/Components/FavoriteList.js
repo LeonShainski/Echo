@@ -38,7 +38,6 @@ function FavoriteList(props) {
   useEffect(() => {
     dispatch(setFavorites(favArticles));
     console.log("favorite list updated");
-    AsyncStorage.setItem('FAV_ARTICLES_STORAGE_KEY', JSON.stringify(reduxFavorites));
     return;
   }, [favArticles]
   )
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
 
   },
   container2: {
-    backgroundColor: '#f5e8c6',
+    backgroundColor: '#dfebf0',
     padding: 10,
   },
   container3: {

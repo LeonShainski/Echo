@@ -6,10 +6,13 @@ import AdditionButton from './AdditionButton';
 import RemoveButton from './RemoveButton';
 import { addSentiment, removeSentiment } from '../store/sentiment';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 function Sentiment(props) {
 
   const allSentiments = ['Happy', 'Sad', 'Information'];
   const reduxSentiment = useSelector((state) => state.sentiments.sentiments);
+  //console.log('reduxSentient', reduxSentiment);
   const dispatch = useDispatch();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -17,8 +20,9 @@ function Sentiment(props) {
     const inSentiment = reduxSentiment.includes(sentiment);
     if (inSentiment) {
       dispatch(removeSentiment(sentiment));
-      console.log('removed');
+      //console.log('removed', sentiment);
       fadeOut();
+      
       //console.log(reduxSentiment);
     }
     else {
@@ -34,7 +38,7 @@ function Sentiment(props) {
 
     if (!inSentiment) {
       dispatch(addSentiment(sentiment))
-      console.log('added');
+      //console.log('added');
       fadeIn();
     }
     else {
@@ -50,6 +54,7 @@ function Sentiment(props) {
     } else {
       includeSentiment(sentiment);
     }
+    return;
   }
 
   const fadeIn = () => {
@@ -74,7 +79,13 @@ function Sentiment(props) {
     fadeIn();
     return;
   })
-
+/* 
+  useEffect(() => {
+    console.log('useeff',reduxSentiment);
+    AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(reduxSentiment));
+    return;
+  }, [reduxSentiment])
+ */
 
   return (
     <View>

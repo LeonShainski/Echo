@@ -9,11 +9,12 @@ import { Icon } from '@rneui/themed';
 import Article from './screens/Article';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
-import { store } from './store/store';
+import { store, persistor } from './store/store';
 import InterestsList from './screens/InterestsList';
 import About from './screens/About';
 import Favorites from './screens/Favorites';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -47,7 +48,7 @@ function HomeStackScreen() {
 
 
 export default function App() {
-
+/* 
   const readData = async () => {
     try {
       const storedSentiments = await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY');
@@ -76,14 +77,15 @@ export default function App() {
   }
 
   useEffect(() => {
-    readData();
+    //readData();
   }, []);
   //storedSettingsView ? Settings : InterestsList
-
+ */
 
   return (
 
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer style={styles.container}>
         <Tab.Navigator>
           <Tab.Screen name="HomeStack" component={HomeStackScreen} options={{
@@ -103,6 +105,7 @@ export default function App() {
           }} />
         </Tab.Navigator>
       </NavigationContainer>
+      </PersistGate>
     </Provider>
   )
 }

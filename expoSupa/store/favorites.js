@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const favoritesSlice = createSlice({
-    name: 'category',
+    name: 'favorites',
     initialState: {
         favorites: [{
             "category": "Humanities",
@@ -15,6 +17,7 @@ const favoritesSlice = createSlice({
             "summary": "This is where you will find your favorite articles. To get started saving your favourite articles, click on the star at the top-right corner of any given article! (P.S feel free to remove this 'article' or any other ones by pressing the star at the top-right of this article).",
             "title": "Welcome to the article crpyt, where articles are kept forever (until you don't want them anymore).",
           }],
+
         favIds: [],
     },
     reducers: {
@@ -25,6 +28,7 @@ const favoritesSlice = createSlice({
                 console.log('addFavorite');
                 console.log(action.payload);
             }
+          
         },
 
         removeFavorite: (state, action) => {
