@@ -1,7 +1,7 @@
 
 import { StyleSheet, Text, View, ScrollView, FlatList, TextInput, Pressable, Switch, Animated, SafeAreaView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { addCategory, removeCategory } from '../store/category';
+import category, { addCategory, removeCategory } from '../store/category';
 import React, { useEffect, useState, useRef, Component } from 'react';
 
 import AdditionButton from './AdditionButton';
@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 function Category(props) {
 
   const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
+  const displayCategories = ['Business', 'Politics', 'Sports', 'Tech', 'Humanities'];
   const reduxCategory = useSelector((state) => state.categories.categories);
   const [simplified, setSimplified] = useState(props.simplified);
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ function Category(props) {
 
 
   async function deleteCategory(category) {
-
+ 
     const inCategory = reduxCategory.includes(category);
     if (inCategory) {
       dispatch(removeCategory(category));
@@ -107,7 +108,7 @@ function Category(props) {
               >
                 <Text style={styles.fadingText}></Text>
               </Animated.View>
-              <Text style={styles.text}> {currCategory}</Text>
+              <Text style={styles.text}> {displayCategories[index]}</Text>
               <AdditionButton title={currCategory} onPress={(e) => includeCategory(currCategory, e)}>
                 Add
               </AdditionButton>
@@ -133,7 +134,7 @@ function Category(props) {
                   value={reduxCategory.includes(currCategory)} // change here
                   onValueChange={(e) => onOffSwitch(currCategory, e)} // change here
                 />
-                <Text style={styles.text}> {currCategory} </Text>
+                <Text style={styles.text}> {displayCategories[index]} </Text>
               </View>
             )
           })}

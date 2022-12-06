@@ -1,50 +1,27 @@
 import { StyleSheet, View, FlatList } from 'react-native';
-import { createClient } from '@supabase/supabase-js'
 import { useEffect, useState } from 'react';
 import FavoriteCard from './FavoriteCard';
-import { useIsFocused } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { setFavorite } from '../store/favorites';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Pressable } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Image } from 'react-native-elements';
-import { TouchableHighlight } from 'react-native';
-
-import { removeFavorite, setFavorites} from '../store/favorites';
-
+import { TouchableHighlight, Dimensions } from 'react-native';
+import { setFavorites } from '../store/favorites';
 
 
 function FavoriteList(props) {
 
-
   const dispatch = useDispatch();
-
   const reduxFavorites = useSelector((state) => state.favorites.favorites);
   const [favArticles, setFavArticles] = useState(reduxFavorites);
 
-  function removeObjectWithId(arr, id) {
-    const objWithIdIndex = arr.findIndex((obj) => obj.id === id);
-  
-    if (objWithIdIndex > -1) {
-      arr.splice(objWithIdIndex, 1);
-    }
-  
-    return arr;
-  }
-
-  function fetchArticles() {
-    setFavArticles(reduxFavorites);
-    console.log('reduxFavorites');
-    //console.log(reduxFavorites);
-  }
 
   function removeFav(article) {
-    
-     console.log('removeFav', article);
+    console.log('removeFav', article);
     var temp = Array.from(favArticles);
-     const index = favArticles.findIndex((obj) => obj.id === article.id);
-     if (index > -1) {
+    const index = favArticles.findIndex((obj) => obj.id === article.id);
+    if (index > -1) {
       temp.splice(index, 1)
       setFavArticles(temp);
     }
@@ -52,20 +29,10 @@ function FavoriteList(props) {
     return;
   }
 
+
   function nav() {
     props.navigation.navigate("About");
   }
-
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  /* 
-  useEffect(() => {
-    readData();
-    return;
-  }, []
-  )
-     */
 
 
   useEffect(() => {
@@ -85,15 +52,12 @@ function FavoriteList(props) {
       <View>
         <Pressable onPress={nav} >
           <Text style={styles.topText}>OPEN ALPHA</Text>
-
         </Pressable>
       </View>
 
       <Image source={image} resizeMode={"stretch"} style={{ width: '100%', height: 20 }}>
         <View style={styles.container}>
-
           <TouchableHighlight onPress={nav}>
-
             <Image
               source={{ uri: 'https://i.ibb.co/DYnBzsG/Leon-Echo-Mediumer-Text-Version1.png' }}//Have echo log pop up really small here (for brand)
               style={{
@@ -107,25 +71,23 @@ function FavoriteList(props) {
               }}
             />
           </TouchableHighlight>
-
-
         </View>
-
-
       </Image>
-
+      <View style={styles.container3}>
       <FlatList data={favArticles} renderItem={(itemData) => {
         return (
           <View key={itemData.id} style={styles.container2}>
-            <FavoriteCard item={itemData.item} navigation={props.navigation} style={styles.article} removeFav={removeFav}/>
+            <FavoriteCard item={itemData.item} navigation={props.navigation} style={styles.article} removeFav={removeFav} />
           </View>
         );
       }} alwaysBounceVertical={false} />
     </View>
-
+    </View>
   )
 }
 
+
+let { height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
@@ -142,8 +104,9 @@ const styles = StyleSheet.create({
   container2: {
     backgroundColor: '#f5e8c6',
     padding: 10,
-
-
+  },
+  container3: {
+    height: height - 140,
   },
   topText: {
     justifyContent: 'center',

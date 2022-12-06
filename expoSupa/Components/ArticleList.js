@@ -1,21 +1,21 @@
 import { StyleSheet, View, FlatList } from 'react-native';
 import { createClient } from '@supabase/supabase-js'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import ArticleCard from './ArticleCard';
 import { useIsFocused } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSentiment } from '../store/sentiment';
 import { setCategory } from '../store/category';
 import { changeFactScore } from '../store/factscore';
-import {changeLocation } from '../store/location';
+import { changeLocation } from '../store/location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Pressable } from 'react-native';
 import { Text } from 'react-native-paper';
 import { Image } from 'react-native-elements';
 import { ImageBackground } from 'react-native';
-import { TouchableHighlight } from 'react-native';
+import { TouchableHighlight, Dimensions } from 'react-native';
 
-import { addFavorite, removeFavorite} from '../store/favorites';
+import { addFavorite, removeFavorite } from '../store/favorites';
 
 
 
@@ -32,86 +32,100 @@ function ArticleList(props) {
   const reduxFactScore = useSelector((state) => state.factScore.factscore);
   const reduxLocation = useSelector((state) => state.location.location);
   const reduxFavorites = useSelector((state) => state.favorites.favorites);
-  const isFocused = useIsFocused();
+  const [id, setId] = useState(0);
+  const flatListRef = useRef();
 
 
   const readData = async () => {
-    console.log('read data');  
+    console.log('read data');
     try {
-        const storedSentiments =  JSON.parse(await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY'));
-        if (storedSentiments !== null && storedSentiments !== undefined) {
-          console.log('storedSentiments');
-          console.log(storedSentiments);
-          dispatch(setSentiment(storedSentiments));
-          
-          
-         
+      const storedSentiments = JSON.parse(await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY'));
+      if (storedSentiments !== null && storedSentiments !== undefined) {
+        console.log('storedSentiments');
+        console.log(storedSentiments);
+        dispatch(setSentiment(storedSentiments));
       }
-     } catch (e) {
-        console.log('Failed to fetch the sentiments from storage');
-        console.log(e);
-      }
-      try {
-          const storedCategories= JSON.parse(await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY'));
-          if (storedCategories !== null && storedCategories !== undefined) {
-            console.log('storedCategories');
-            console.log(storedCategories);
-            dispatch(setCategory(storedCategories))
-          }
-        } catch (e) {
-          console.log('Failed to fetch the categories from storage');
-        }
-        try {
-          const storedFactScore= parseInt(await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY'));
-          
-          if (storedFactScore !== null && storedFactScore !== undefined) {
-            console.log('storedFactScore');
-            console.log(storedFactScore);
-            dispatch(changeFactScore(storedFactScore));
-          }
-        } catch (e) {
-          console.log('Failed to fetch the factscore from storage');
-          console.log(e);
-        }
-        try {
-          const storedLocation= await AsyncStorage.getItem('LOCATION_STORAGE_KEY');
-          if (storedLocation !== null && storedLocation !== undefined) {
-            console.log('storedLocation');
-            console.log(storedLocation);
-            dispatch(changeLocation(storedLocation));
-          }
-          
-        } catch (e) {
-          console.log('Failed to fetch the location from storage');
-          console.log(e);
-        }
-        
+    } catch (e) {
+      console.log('Failed to fetch the sentiments from storage');
+      console.log(e);
     }
+    try {
+      const storedCategories = JSON.parse(await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY'));
+      if (storedCategories !== null && storedCategories !== undefined) {
+        console.log('storedCategories');
+        console.log(storedCategories);
+        dispatch(setCategory(storedCategories))
+      }
+    } catch (e) {
+      console.log('Failed to fetch the categories from storage');
+    }
+    try {
+      const storedFactScore = parseInt(await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY'));
+
+      if (storedFactScore !== null && storedFactScore !== undefined) {
+        console.log('storedFactScore');
+        console.log(storedFactScore);
+        dispatch(changeFactScore(storedFactScore));
+      }
+    } catch (e) {
+      console.log('Failed to fetch the factscore from storage');
+      console.log(e);
+    }
+    try {
+      const storedLocation = await AsyncStorage.getItem('LOCATION_STORAGE_KEY');
+      if (storedLocation !== null && storedLocation !== undefined) {
+        console.log('storedLocation');
+        console.log(storedLocation);
+        dispatch(changeLocation(storedLocation));
+      }
+    } catch (e) {
+      console.log('Failed to fetch the location from storage');
+      console.log(e);
+    }
+
+  }
 
 
 
   async function fetchArticles(factScore, category, sentiment, location) {
 
-    if (location == undefined){
+    if (location == undefined) {
       location = 'EST'
     }
     const artList = await supabase
       .from('articles')
       .select('*')
-      .gte('fact_score', (factScore/10))
+      .gte('id', id)
+      .gte('fact_score', (factScore / 10))
       .in('category', category)
       .in('sentiment', sentiment)
       .eq('location', location)
       .not('title', 'is', null)
-      .limit(100)
+      .limit(50)
 
     var arts = [];
     for (const key in artList.data) {
       let inFaves = false;
-      if (reduxFavorites.find(x => x.id == artList.data[key].id) != undefined){
+      var cat = artList.data[key].category;
+      if (cat == 'entertainment') {
+        cat = 'Humanities';
+      }
+      else if (cat == 'business') {
+        cat = 'Business'
+      }
+      else if (cat == 'politics') {
+        cat = 'Politics';
+      }
+      else if (cat == 'sports') {
+        cat = 'Sports';
+      }
+      else if (cat == 'tech') {
+        cat = 'Tech';
+      }
+      if (reduxFavorites.find(x => x.id == artList.data[key].id) != undefined) {
         inFaves = true;
       }
-      
+
       const artobj = {
         id: artList.data[key].id,
         title: artList.data[key].title,
@@ -120,35 +134,47 @@ function ArticleList(props) {
         link: artList.data[key].link,
         factScore: artList.data[key].fact_score,
         sentiment: artList.data[key].sentiment,
-        category: artList.data[key].category,
+        category: cat,
         location: artList.data[key].location,
         favorite: inFaves
-       
       };
       arts.push(artobj);
     }
+    var end = { id: 0 }
+    arts.push(end);
     setArticles(arts);
   }
 
-function nav(){
-  props.navigation.navigate("About");
-}
+  function nav() {
+    props.navigation.navigate("About");
+  }
+
+  async function loadMore() {
+    if (articles.length > 45) {
+      var s = articles.pop();
+      s = articles.pop();
+      setId(s.id)
+    } else {
+      setId(0);
+    }
+    await sleep(300);
+    flatListRef.current.scrollToIndex({ animated: false, index: 0 });
+    return;
+  }
 
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-useEffect(() => {
-  readData();
-  return;
-}, []
-)
-  
-
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
   useEffect(() => {
-    fetchArticles(reduxFactScore, reduxCategory, reduxSentiment,reduxLocation);
+    readData();
+    return;
+  }, []
+  )
+
+  useEffect(() => {
+    fetchArticles(reduxFactScore, reduxCategory, reduxSentiment, reduxLocation);
     console.log("article list updated")
     AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(reduxCategory));
     AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(reduxSentiment));
@@ -156,60 +182,55 @@ useEffect(() => {
     AsyncStorage.setItem('LOCATION_STORAGE_KEY', reduxLocation);
     sleep(1000);
     return;
-  }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation, reduxFavorites]
+  }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation, reduxFavorites, id]
   )
-
 
   const [articles, setArticles] = useState(() => fetchArticles(reduxFactScore, reduxCategory, reduxSentiment, reduxLocation));
   const image = { uri: "https://i.ibb.co/kqC18S0/echo-gradient-background1.jpg" };
 
 
   return (
-    
+
     <View >
       <View>
         <Pressable onPress={nav} >
           <Text style={styles.topText}>OPEN ALPHA</Text>
-          
         </Pressable>
-        </View>
-      
-      <Image source={image} resizeMode={"stretch"}  style={{ width: '100%', height: 20}}>
-      <View style={styles.container}>
-        
-      <TouchableHighlight onPress={nav}>
-        
-      <Image
-        source={{ uri: 'https://i.ibb.co/DYnBzsG/Leon-Echo-Mediumer-Text-Version1.png' }}//Have echo log pop up really small here (for brand)
-        style={{ width: 60, height: 20,alignContent: 'center', //https://i.ibb.co/4txfbtM/Leon-Echo-Medium-Full-Logo-With-Phone-Version1.png
-        justifyContent: 'center',
-        borderRadius: 1,
-        borderColor: '#000',
-        shadowRadius: 2,
-        shadowColor: '#000'
-        
-        }}
-      />
-      </TouchableHighlight>
-      
-      
       </View>
-      
-        
+
+      <Image source={image} resizeMode={"stretch"} style={{ width: '100%', height: 20 }}>
+        <View style={styles.container}>
+          <TouchableHighlight onPress={nav}>
+            <Image
+              source={{ uri: 'https://i.ibb.co/DYnBzsG/Leon-Echo-Mediumer-Text-Version1.png' }}//Have echo log pop up really small here (for brand)
+              style={{
+                width: 60, height: 20, alignContent: 'center', //https://i.ibb.co/4txfbtM/Leon-Echo-Medium-Full-Logo-With-Phone-Version1.png
+                justifyContent: 'center',
+                borderRadius: 1,
+                borderColor: '#000',
+                shadowRadius: 2,
+                shadowColor: '#000'
+
+              }}
+            />
+          </TouchableHighlight>
+        </View>
       </Image>
-       
-      <FlatList data={articles} renderItem={(itemData) => {
+      <View style={styles.container3}>
+        <FlatList ref={flatListRef} data={articles} renderItem={(itemData) => {
           return (
             <View style={styles.container2}>
-              <ArticleCard item={itemData.item} navigation={props.navigation} style={styles.article}/>
+              <ArticleCard item={itemData.item} navigation={props.navigation} style={styles.article} loadMore={loadMore} />
             </View>
           );
-      }} alwaysBounceVertical={false} />
-     
+        }} alwaysBounceVertical={false} />
+      </View>
     </View>
-    
+
   )
 }
+
+let { height } = Dimensions.get("window");
 
 
 const styles = StyleSheet.create({
@@ -222,23 +243,23 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowColor: '#000',
     flexDirection: 'row'
-    
-  },
-  container2: {
-   backgroundColor: '#f5e8c6',
-    padding: 10,
-    
 
   },
+  container2: {
+    backgroundColor: '#f5e8c6',
+    padding: 10,
+  },
+  container3: {
+    height: height - 140,
+  },
   topText: {
-    justifyContent:'center',
+    justifyContent: 'center',
     flexDirection: 'column',
     alignContent: 'center',
   },
   article: {
     borderColor: '#cbf5f2',
     borderWidth: 1
-    
   }
 
 });

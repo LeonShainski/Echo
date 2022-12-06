@@ -3,102 +3,88 @@ import { useEffect, useState } from 'react';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { Icon } from '@rneui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { addFavorite, removeFavorite} from '../store/favorites';
+import { addFavorite, removeFavorite } from '../store/favorites';
 import { useSelector, useDispatch } from 'react-redux';
-
-import { useIsFocused } from '@react-navigation/native';
 
 function ArticleCard(props) {
 
   const item = props.item;
-  const isFocused = useIsFocused();
   const [clicked, setClicked] = useState(false);
- 
   const dispatch = useDispatch();
-
-  const reduxFavorites = useSelector((state) => state.favorites.favIds);
-  
-
   const [favorite, setFavorite] = useState(item.favorite);
 
   function toggleText() {
     setClicked(!clicked);
-
   }
+
   function nav() {
     props.navigation.navigate("Article", { link: item.link });
   }
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+
+  function addFav() {
+    dispatch(addFavorite(item));
+    console.log('added', item);
+    setFavorite(true);
+    return;
+  };
+
+  function removeFav() {
+    dispatch(removeFavorite(item));
+    setFavorite(false);
+    return;
   }
 
- function toggleFavorite(){
-  setFavorite(!favorite);
- }
+  function loadMore() {
+    props.loadMore();
+  }
 
- function addFav(){
-  dispatch(addFavorite(item));
-  console.log('added', item);
-  setFavorite(true);
-  return;
-};
-
-function removeFav(){
-      dispatch(removeFavorite(item));
-      setFavorite(false);
-      return;
-}
-
-
-
-
-  return (
-
-    <View>
-      
+  if (item.id != 0) {
+    return (
+      <View>
         <Card>
           <Card.Actions>
-            <Pressable onPress={favorite? removeFav : addFav}>
-              <Icon name={favorite? 'star' : 'home'}/>
+            <Pressable onPress={favorite ? removeFav : addFav}>
+              <Icon name={favorite ? 'star' : 'home'} />
             </Pressable>
           </Card.Actions>
           <Pressable onPress={nav}>
-          <Card.Cover source={(item.img !== "") ? { uri: item.img } : require('../assets/Leon_Echo_MediumFullLogoWithPhone_Version1.png')} />
-          <Card.Content>
-            <Title>{item.title}</Title>
-            <View style={styles.iconContainer}>
-              <View style={styles.iconGroup}>
-              <Icon name='checkbox-marked-circle-outline' type='material-community'/>
-              <Text>  {Math.floor(item.factScore * 100)}%</Text>
+            <Card.Cover source={(item.img !== "") ? { uri: item.img } : require('../assets/Leon_Echo_MediumFullLogoWithPhone_Version1.png')} />
+            <Card.Content>
+              <Title>{item.title}</Title>
+              <View style={styles.iconContainer}>
+                <View style={styles.iconGroup}>
+                  <Icon name='checkbox-marked-circle-outline' type='material-community' />
+                  <Text>  {Math.floor(item.factScore * 100)}%</Text>
+                </View>
+                <View style={styles.iconGroup}>
+                  <Icon name='heart-pulse' type='material-community' />
+                  <Text>  {item.sentiment}</Text>
+                </View>
+                <View style={styles.iconGroup}>
+                  <Icon name='newspaper' type='material-community' />
+                  <Text>  {item.category}</Text>
+                </View>
               </View>
-              <View style={styles.iconGroup}>
-              <Icon name='heart-pulse' type='material-community'/>
-              <Text>  {item.sentiment}</Text>
-              </View>
-              <View style={styles.iconGroup}>
-              <Icon name='newspaper' type='material-community'/>
-              <Text>  {item.category}</Text>
-              </View>
-            </View>
-            <Pressable onPress={toggleText} >
-              <View style={styles.container}>
-                <Paragraph style={clicked ? styles.container : styles.container2}>
-                  {item.summary}
-                </Paragraph>
-                <Button icon={clicked? "minus":"plus"} mode="contained" onPress={toggleText}>
-              expand
-            </Button>
-              </View>
-            </Pressable>
-        
-          </Card.Content></Pressable>
-
+              <Pressable onPress={toggleText} >
+                <View style={styles.container}>
+                  <Paragraph style={clicked ? styles.container : styles.container2}>
+                    {item.summary}
+                  </Paragraph>
+                  <Paragraph>
+                    expand +
+                  </Paragraph>
+                </View>
+              </Pressable>
+            </Card.Content></Pressable>
         </Card>
-       
-      
-
-    </View>
-  );
+      </View>
+    );
+  } else {
+    return (
+      <View>
+        <Button mode="contained" onPress={loadMore}> Load More</Button>
+      </View>)
+  }
 }
 
 
