@@ -19,7 +19,7 @@ import { RadioButton } from 'react-native-paper';
 
 function InterestsList() {
 
-  const [simplifiedSettingsSelected, toggleSettings] = useState('false');
+  const [simplifiedSettingsSelected, toggleSettings] = useState(false);
   //Animated Status
   // fadeAnim will be used as the value for opacity. Initial Value: 0
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -29,18 +29,22 @@ function InterestsList() {
     console.log(simplifiedSettingsSelected);
   }
 
+  
   useEffect(() => {
-    toggleSettingsView(simplifiedSettingsSelected);
+  const storedSettingsView = AsyncStorage.getItem('SETTINGS_VIEW_STORAGE_KEY');
+  if (storedSettingsView !== undefined){
+    toggleSettings(storedSettingsView == 'false')
+  }
     return;
   }, [])
 
 
   if (simplifiedSettingsSelected) {
+     
     return (
       <SafeAreaView style={styles.safeView}>
         <ScrollView>
 
-          
           <View>
             <FactScore />
             <Sentiment simplified={simplifiedSettingsSelected} />
@@ -53,17 +57,21 @@ function InterestsList() {
               trackColor={{ false: "#767577", true: "#81b0ff" }}
               thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
-              activeText={'ON'}
-              inActiveText={'Off'}
               onValueChange={toggleSettingsView}
               value={simplifiedSettingsSelected}
             />
           </View>
+
+          <FactScore />
+          <Sentiment simplified={simplifiedSettingsSelected} />
+          <Category simplified={simplifiedSettingsSelected} />
+          <Location />
         </ScrollView>
       </SafeAreaView>
     );
-  } else {
+  } else{
     return (
+
       <SafeAreaView style={styles.safeView}>
         <ScrollView>
           
@@ -87,6 +95,7 @@ function InterestsList() {
       </SafeAreaView>
     );
   }
+
 
 }
 
