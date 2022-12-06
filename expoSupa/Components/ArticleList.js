@@ -54,7 +54,7 @@ function ArticleList(props) {
       if (storedCategories !== null && storedCategories !== undefined) {
         console.log('storedCategories');
         console.log(storedCategories);
-        dispatch(setCategory(storedCategories))
+        dispatch(setCategory(storedCategories));
       }
     } catch (e) {
       console.log('Failed to fetch the categories from storage');
@@ -82,6 +82,7 @@ function ArticleList(props) {
       console.log('Failed to fetch the location from storage');
       console.log(e);
     }
+    return;
 
   }
 
@@ -106,22 +107,8 @@ function ArticleList(props) {
     var arts = [];
     for (const key in artList.data) {
       let inFaves = false;
-      var cat = artList.data[key].category;
-      if (cat == 'entertainment') {
-        cat = 'Humanities';
-      }
-      else if (cat == 'business') {
-        cat = 'Business'
-      }
-      else if (cat == 'politics') {
-        cat = 'Politics';
-      }
-      else if (cat == 'sports') {
-        cat = 'Sports';
-      }
-      else if (cat == 'tech') {
-        cat = 'Tech';
-      }
+      
+      
       if (reduxFavorites.find(x => x.id == artList.data[key].id) != undefined) {
         inFaves = true;
       }
@@ -134,7 +121,7 @@ function ArticleList(props) {
         link: artList.data[key].link,
         factScore: artList.data[key].fact_score,
         sentiment: artList.data[key].sentiment,
-        category: cat,
+        category: artList.data[key].category,
         location: artList.data[key].location,
         favorite: inFaves
       };
@@ -246,7 +233,7 @@ const styles = StyleSheet.create({
 
   },
   container2: {
-    backgroundColor: '#f5e8c6',
+    backgroundColor: '#dfebf0',
     padding: 10,
   },
   container3: {

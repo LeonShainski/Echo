@@ -46,7 +46,7 @@ function FactScore(props) {
     justifyContent: 'center',
     alignItems: 'center',
     textAlign: 'center',
-    fontSize: 21}}>{reduxFactScore}</Text>
+    fontSize: 21}}>{reduxFactScore*10}</Text>
             <Slider
                 value={factScore}
                 onValueChange={setFactScore}

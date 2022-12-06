@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const sentimentSlice = createSlice({
     name: 'sentiment',
     initialState: {
@@ -14,7 +12,9 @@ const sentimentSlice = createSlice({
         
         },
         removeSentiment:(state, action) =>{
+            console.log('action.payload', action.payload);
             state.sentiments = state.sentiments.filter((item) => item !== action.payload);
+            console.log('state.sentiments', state.sentiments);
             
         },
         setSentiment:(state, action) => {

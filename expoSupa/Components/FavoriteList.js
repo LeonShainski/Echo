@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 
   },
   container2: {
-    backgroundColor: '#f5e8c6',
+    backgroundColor: '#dfebf0',
     padding: 10,
   },
   container3: {
