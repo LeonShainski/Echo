@@ -35,7 +35,7 @@ function ArticleList(props) {
   const [id, setId] = useState(0);
   const flatListRef = useRef();
 
-
+/* 
   const readData = async () => {
     console.log('read data');
     try {
@@ -86,7 +86,7 @@ function ArticleList(props) {
 
   }
 
-
+ */
 
   async function fetchArticles(factScore, category, sentiment, location) {
 
@@ -109,7 +109,7 @@ function ArticleList(props) {
       let inFaves = false;
       
       
-      if (reduxFavorites.find(x => x.id == artList.data[key].id) != undefined) {
+      if (reduxFavorites!= undefined && reduxFavorites.find(x => x.id == artList.data[key].id) != undefined) {
         inFaves = true;
       }
 
@@ -155,7 +155,7 @@ function ArticleList(props) {
   }
 
   useEffect(() => {
-    readData();
+   // readData();
     return;
   }, []
   )
@@ -163,10 +163,6 @@ function ArticleList(props) {
   useEffect(() => {
     fetchArticles(reduxFactScore, reduxCategory, reduxSentiment, reduxLocation);
     console.log("article list updated")
-    AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(reduxCategory));
-    AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(reduxSentiment));
-    AsyncStorage.setItem('FACT_SCORE_STORAGE_KEY', JSON.stringify(reduxFactScore));
-    AsyncStorage.setItem('LOCATION_STORAGE_KEY', reduxLocation);
     sleep(1000);
     return;
   }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation, reduxFavorites, id]

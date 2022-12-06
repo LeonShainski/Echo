@@ -12,11 +12,7 @@ function Category(props) {
   const allCategories = ['business', 'politics', 'sports', 'tech', 'entertainment'];
   const displayCategories = ['Business', 'Politics', 'Sports', 'Tech', 'Humanities'];
   const reduxCategory = useSelector((state) => state.categories.categories);
-  console.log('reduxcat', reduxCategory);
   const dispatch = useDispatch();
-
-  //Animated Status
-  // fadeAnim will be used as the value for opacity. Initial Value: 0
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
 
@@ -24,13 +20,11 @@ function Category(props) {
     const inCategory = reduxCategory.includes(category);
     if (inCategory) {
       dispatch(removeCategory(category));
-      console.log('removed', category);
       fadeOut();
 
        }
     else {
       console.log('not added ');
-      //console.log(reduxSentiment);
     }
     return;
   }
@@ -41,12 +35,10 @@ function Category(props) {
 
     if (!inCategory) {
       dispatch(addCategory(category))
-      console.log('added', category);
       fadeIn();
      }
     else {
       console.log('not added ');
-      //console.log(reduxSentiment);
     }
     return;
   }
@@ -71,7 +63,6 @@ function Category(props) {
   };
 
 
-
   const fadeOut = () => {
     // Will change fadeAnim value to 0 in 3 seconds
     Animated.timing(fadeAnim, {
@@ -82,19 +73,10 @@ function Category(props) {
   };
 
 
-
-
   useEffect(() => {
     fadeIn();
     return;
   })
-
-  useEffect(() => {
-    console.log('redux', reduxCategory);
-    AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(reduxCategory));
-    return;
-  }, [reduxCategory])
-
 
 
   return (
@@ -120,10 +102,10 @@ function Category(props) {
 
               <Text style={styles.text}> {displayCategories[index]}</Text>
 
-              <AdditionButton title={currCategory} onPress={(e) => includeCategory(currCategory, e)}>
+              <AdditionButton title={currCategory} onPress={async (e) => await includeCategory(currCategory, e)}>
                 Add
               </AdditionButton>
-              <RemoveButton title={currCategory} onPress={(e) => deleteCategory(currCategory, e)}>
+              <RemoveButton title={currCategory} onPress={async (e) => await deleteCategory(currCategory, e)}>
                 Remove
               </RemoveButton>
 

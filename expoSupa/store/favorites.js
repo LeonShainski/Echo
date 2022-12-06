@@ -1,32 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const favoritesSlice = createSlice({
-    name: 'category',
+    name: 'favorites',
     initialState: {
-        favorites: [{
-            "category": "business",
-            "factScore": 0.858443,
-            "favorite": false,
-            "id": 2622,
-            "img": "https://media.bizj.us/view/img/12406099/headshotcarl-roer*200xx1806-1207-0-218.jpg",
-            "link": "https://www.bizjournals.com/newyork/news/2022/12/02/nba-equity-grows-portfolio-as-upstarts-take-shot.html?ana=brss_3590",
-            "location": "PST",
-            "sentiment": "Information",
-            "summary": "Less than a year after its launch, the NBA's investment arm, NBA Equity, has added nearly 20 companies to its portfolio.",
-            "title": "NBA Equity’s portfolio grows as upstarts take their shot",
-          }, {
-            "category": "business",
-            "factScore": 0.667134,
-            "favorite": false,
-            "id": 2627,
-            "img": "https://media.bizj.us/view/img/12406216/gettyimages-1406532002*900xx7985-5333-0-0.jpg",
-            "link": "https://www.bizjournals.com/phoenix/subscriber-only/2022/12/02/largest-arizona-fy2022-sba-7a-loans.html?ana=brss_3590",
-            "location": "PST",
-            "sentiment": "Information",
-            "summary": "Researched list with data provided by the SBA's Arizona District office. Information points include loan amount, borrower, business category, jobs supported and lender.",
-            "title": "Largest Arizona FY2022 SBA 7(a) Loans",
-          }],
-        favIds: [2622, 2627],
+        favorites: [],
+        favIds: [],
     },
     reducers: {
         addFavorite: (state, action) => {
@@ -36,6 +16,7 @@ const favoritesSlice = createSlice({
                 console.log('addFavorite');
                 console.log(action.payload);
             }
+          
         },
 
         removeFavorite: (state, action) => {

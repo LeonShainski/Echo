@@ -38,7 +38,6 @@ function FavoriteList(props) {
   useEffect(() => {
     dispatch(setFavorites(favArticles));
     console.log("favorite list updated");
-    AsyncStorage.setItem('FAV_ARTICLES_STORAGE_KEY', JSON.stringify(reduxFavorites));
     return;
   }, [favArticles]
   )
