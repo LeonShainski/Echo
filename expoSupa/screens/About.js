@@ -152,7 +152,51 @@ function About() {
         </ImageBackground>
         </ImageBackground>
         </View>
-        
+        <View>  
+            <ImageBackground source={{uri: "https://i.ibb.co/hKjK1JX/gradient-19.png"}}>
+            <View>
+                <Text style={styles.plainText2}>
+                    The Echo Advantage
+                </Text>
+                </View>
+                </ImageBackground>
+                <View>
+                    <Text style={styles.plainText3_2}>
+                        The Fact Score
+                    </Text>
+                    <Text style={styles.plainText4}>
+                        The Fact Score slider in the settings page allows you to set the minimum allowable fact score rating that you would like to see your articles comply with.
+                    </Text>
+                </View>
+                <View>
+                    <Text style={styles.plainText3_2}>
+                        Sentiment Settings
+                    </Text>
+                    <Text style={styles.plainText4}>
+                        Our sentiment analysis ranks articles by their tonality, by what emotion you may experience when reading the article. 
+                        By selecting a sentiment setting in the settings page, you are able to set which tone of articles you will see, giving you greater control into the human aspect of the world of news.
+                    </Text>
+                </View>
+                <View>
+                    <Text style={styles.plainText3_2}>
+                        Favorites
+                    </Text>
+                    <Text style={styles.plainText4}>
+                        When looking at an article on your home page, you may wish to save it for later. Worry not, saving it for later does not save it on our servers (thus potentially violating your privacy),
+                        but rather stores all of the information about the article locally. Worry not about your dwindling local storage space either, as the article information is stored purley as text (even the image is stored not as an image but as a link to one), 
+                        meaning a whole lot of articles can be stored with a tiny amount of space.
+                    </Text>
+                </View>
+                <View>
+                    <Text style={styles.plainText3_2}>
+                        Time Zones
+                    </Text>
+                    <Text style={styles.plainText4}>
+                        Whilst it might be a little weird to select a location by your nearest time zone, this was a crucial design step we had to take in order to provide as much news as possible for our early Alpha while maintaining some level of locality. 
+                        In short, we started off on the macro scale, providing as much as possible, and as we continue to improve we will continue to reduce the scope of the locations, until it becomes as local as you would have wanted it to be.
+                    </Text>
+                </View>
+            </View>
         <View >
             <ImageBackground source={{uri: 'https://i.ibb.co/zPtGtr9/Azur-Lane.png'}} resizeMode={"stretch"}  style={{ width: '100%', height: 300, resizeMode:'cover', marginTop: 'auto', marginBottom: 'auto'}}>
             
@@ -174,6 +218,8 @@ function About() {
             
             
         </View>
+
+        
         
         </ScrollView>
         </View>
@@ -257,6 +303,33 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         paddingRight: 5,
         textAlign: 'justify',
+        fontFamily: 'sans-serif-medium', 
+        
+    },plainText3_2: {
+        paddingTop: 20,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        fontSize: 20,
+        color: '#028ac4',
+        flexWrap: 'wrap',
+        textShadowColor: '#000',
+        textShadowRadius: 1,
+        paddingLeft: 5,
+        paddingRight: 5,
+        textAlign: 'justify',
+        fontFamily: 'sans-serif-medium', 
+        
+    }
+    ,plainText4: {
+        fontSize: 14,
+        padding: 20,
+        color: '#000',
+        flexWrap: 'wrap',
+        textShadowColor: '#ab9b9a',
+        textShadowRadius: 1,
+        paddingLeft: 5,
+        paddingRight: 5,
+        textAlign: 'left',
         fontFamily: 'sans-serif-medium', 
         
     },
