@@ -47,8 +47,8 @@ function HomeStackScreen(){
         
       />
       <HomeStack.Screen
-        name="About"
-        component={About}
+        name="Favourites"
+        component={Favorites}
         options={{ tabBarLabel: 'art' }}
         
       />
@@ -71,13 +71,15 @@ export default function App() {
       const storedFactScore= await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY');
       const storedSettingsView= await AsyncStorage.getItem('SETTINGS_VIEW_STORAGE_KEY');
       const storedLocation = await AsyncStorage.getItem('LOCATION_STORAGE_KEY');
+      const storedFavorites = await AsyncStorage.getItem('FAV_ARTICLES_STORAGE_KEY');
 
       if (storedSentiments !== null) {
-        console.log(storedSentiments);
-        console.log(storedCategories);
-        console.log(storedFactScore);
+        console.log('sentiments', storedSentiments);
+        console.log('categories',storedCategories);
+        console.log('factScore', storedFactScore);
         console.log(storedSettingsView);
-        console.log(storedLocation);
+        console.log('location', storedLocation);
+        console.log('favorites', storedFavorites);
         testVar = storedSettingsView;
         console.log('HEY LOOK HERE HEY LOOK HERE');
         console.log(testVar);

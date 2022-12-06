@@ -14,6 +14,9 @@ const categorySlice = createSlice({
         removeCategory:(state, action) =>{
             state.categories = state.categories.filter((item) => item !== action.payload);
             
+        },
+        setCategory:(state, action) => {
+            return {...state, categories: action.payload};
         }
 
     }
@@ -21,6 +24,7 @@ const categorySlice = createSlice({
 
 export const addCategory = categorySlice.actions.addCategory;
 export const removeCategory = categorySlice.actions.removeCategory;
+export const setCategory = categorySlice.actions.setCategory;
 export default categorySlice.reducer;
 
 

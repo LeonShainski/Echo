@@ -1,25 +1,12 @@
 import { StyleSheet, View, Pressable, Text } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { Icon } from '@rneui/themed';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { addFavorite, removeFavorite} from '../store/favorites';
-import { useSelector, useDispatch } from 'react-redux';
 
-import { useIsFocused } from '@react-navigation/native';
-
-function ArticleCard(props) {
+function FavoriteCard(props) {
 
   const item = props.item;
-  const isFocused = useIsFocused();
   const [clicked, setClicked] = useState(false);
- 
-  const dispatch = useDispatch();
-
-  const reduxFavorites = useSelector((state) => state.favorites.favIds);
-  
-
-  const [favorite, setFavorite] = useState(item.favorite);
 
   function toggleText() {
     setClicked(!clicked);
@@ -32,22 +19,13 @@ function ArticleCard(props) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
- function toggleFavorite(){
-  setFavorite(!favorite);
+ function removeFav(){
+    props.removeFav(item);
+  return;
+
  }
 
- function addFav(){
-  dispatch(addFavorite(item));
-  console.log('added', item);
-  setFavorite(true);
-  return;
-};
 
-function removeFav(){
-      dispatch(removeFavorite(item));
-      setFavorite(false);
-      return;
-}
 
 
 
@@ -58,8 +36,8 @@ function removeFav(){
       
         <Card>
           <Card.Actions>
-            <Pressable onPress={favorite? removeFav : addFav}>
-              <Icon name={favorite? 'star' : 'home'}/>
+            <Pressable onPress={removeFav}>
+              <Icon name={'star'}/>
             </Pressable>
           </Card.Actions>
           <Pressable onPress={nav}>
@@ -90,11 +68,9 @@ function removeFav(){
             </Button>
               </View>
             </Pressable>
-        
           </Card.Content></Pressable>
 
         </Card>
-       
       
 
     </View>
@@ -126,4 +102,4 @@ const styles = StyleSheet.create({
 
 
 
-export default ArticleCard;
+export default FavoriteCard;

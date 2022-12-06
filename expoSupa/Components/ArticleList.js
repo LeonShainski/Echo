@@ -4,16 +4,18 @@ import { useEffect, useState } from 'react';
 import ArticleCard from './ArticleCard';
 import { useIsFocused } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-
-import { addSentiment, removeSentiment } from '../store/sentiment';
+import { setSentiment } from '../store/sentiment';
+import { setCategory } from '../store/category';
+import { changeFactScore } from '../store/factscore';
+import {changeLocation } from '../store/location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import { Pressable } from 'react-native';
 import { Text } from 'react-native-paper';
-
 import { Image } from 'react-native-elements';
 import { ImageBackground } from 'react-native';
 import { TouchableHighlight } from 'react-native';
+
+import { addFavorite, removeFavorite} from '../store/favorites';
 
 
 
@@ -29,65 +31,67 @@ function ArticleList(props) {
   const reduxCategory = useSelector((state) => state.categories.categories);
   const reduxFactScore = useSelector((state) => state.factScore.factscore);
   const reduxLocation = useSelector((state) => state.location.location);
-  const isFocused = useIsFocused()
+  const reduxFavorites = useSelector((state) => state.favorites.favorites);
+  const isFocused = useIsFocused();
 
-    const readData = async () => {
-      console.log('read data');  
+
+  const readData = async () => {
+    console.log('read data');  
+    try {
+        const storedSentiments =  JSON.parse(await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY'));
+        if (storedSentiments !== null && storedSentiments !== undefined) {
+          console.log('storedSentiments');
+          console.log(storedSentiments);
+          dispatch(setSentiment(storedSentiments));
+          
+          
+         
+      }
+     } catch (e) {
+        console.log('Failed to fetch the sentiments from storage');
+        console.log(e);
+      }
       try {
-          const storedSentiments =  JSON.parse(await AsyncStorage.getItem('SENTIMENT_STORAGE_KEY'));
-          if (storedSentiments !== null && storedSentiments !== undefined) {
-            console.log('storedSentiments');
-            console.log(storedSentiments);
-            for (const s of storedSentiments){
-              
-            }
-            
-            
-           
+          const storedCategories= JSON.parse(await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY'));
+          if (storedCategories !== null && storedCategories !== undefined) {
+            console.log('storedCategories');
+            console.log(storedCategories);
+            dispatch(setCategory(storedCategories))
+          }
+        } catch (e) {
+          console.log('Failed to fetch the categories from storage');
         }
-       } catch (e) {
-          console.log('Failed to fetch the sentiments from storage');
+        try {
+          const storedFactScore= parseInt(await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY'));
+          
+          if (storedFactScore !== null && storedFactScore !== undefined) {
+            console.log('storedFactScore');
+            console.log(storedFactScore);
+            dispatch(changeFactScore(storedFactScore));
+          }
+        } catch (e) {
+          console.log('Failed to fetch the factscore from storage');
           console.log(e);
         }
         try {
-            const storedCategories= JSON.parse(await AsyncStorage.getItem('CATEGORIES_STORAGE_KEY'));
-            if (storedCategories !== null && storedCategories !== undefined) {
-              console.log('storedCategories');
-              console.log(storedCategories);
-            }
-          } catch (e) {
-            console.log('Failed to fetch the categories from storage');
-          }
-          try {
-            const storedFactScore= JSON.parse(await AsyncStorage.getItem('FACT_SCORE_STORAGE_KEY'));
-            
-            if (storedFactScore !== null && storedFactScore !== undefined) {
-              console.log('storedFactScore');
-              console.log(storedFactScore);
-              
-            }
-          } catch (e) {
-            console.log('Failed to fetch the factscore from storage');
-          }
-          try {
-            const storedLocation= await AsyncStorage.getItem('LOCATION_STORAGE_KEY');
-            if (storedLocation !== null && storedLocation !== undefined) {
-              console.log('storedLocation');
-              console.log(storedLocation);
-              
-            }
-          } catch (e) {
-            console.log('Failed to fetch the location from storage');
+          const storedLocation= await AsyncStorage.getItem('LOCATION_STORAGE_KEY');
+          if (storedLocation !== null && storedLocation !== undefined) {
+            console.log('storedLocation');
+            console.log(storedLocation);
+            dispatch(changeLocation(storedLocation));
           }
           
-      }
+        } catch (e) {
+          console.log('Failed to fetch the location from storage');
+          console.log(e);
+        }
+        
+    }
 
 
 
   async function fetchArticles(factScore, category, sentiment, location) {
 
-    console.log('location');
-    console.log(location);
     if (location == undefined){
       location = 'EST'
     }
@@ -103,6 +107,11 @@ function ArticleList(props) {
 
     var arts = [];
     for (const key in artList.data) {
+      let inFaves = false;
+      if (reduxFavorites.find(x => x.id == artList.data[key].id) != undefined){
+        inFaves = true;
+      }
+      
       const artobj = {
         id: artList.data[key].id,
         title: artList.data[key].title,
@@ -113,6 +122,8 @@ function ArticleList(props) {
         sentiment: artList.data[key].sentiment,
         category: artList.data[key].category,
         location: artList.data[key].location,
+        favorite: inFaves
+       
       };
       arts.push(artobj);
     }
@@ -122,6 +133,7 @@ function ArticleList(props) {
 function nav(){
   props.navigation.navigate("About");
 }
+
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -133,12 +145,7 @@ useEffect(() => {
 }, []
 )
   
-useEffect(() => {
-  fetchArticles(reduxFactScore, reduxCategory, reduxSentiment, reduxLocation);
-  console.log("article list focused")
-  return;
-}, [isFocused]
-)
+
 
   useEffect(() => {
     fetchArticles(reduxFactScore, reduxCategory, reduxSentiment,reduxLocation);
@@ -146,10 +153,10 @@ useEffect(() => {
     AsyncStorage.setItem('CATEGORIES_STORAGE_KEY', JSON.stringify(reduxCategory));
     AsyncStorage.setItem('SENTIMENT_STORAGE_KEY', JSON.stringify(reduxSentiment));
     AsyncStorage.setItem('FACT_SCORE_STORAGE_KEY', JSON.stringify(reduxFactScore));
-    AsyncStorage.setItem('LOCATION_STORAGE_KEY', JSON.stringify(reduxLocation));
+    AsyncStorage.setItem('LOCATION_STORAGE_KEY', reduxLocation);
     sleep(1000);
     return;
-  }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation]
+  }, [reduxFactScore, reduxCategory, reduxSentiment, reduxLocation, reduxFavorites]
   )
 
 
@@ -190,7 +197,7 @@ useEffect(() => {
       
         
       </Image>
-
+       
       <FlatList data={articles} renderItem={(itemData) => {
           return (
             <View style={styles.container2}>
@@ -198,6 +205,7 @@ useEffect(() => {
             </View>
           );
       }} alwaysBounceVertical={false} />
+     
     </View>
     
   )
