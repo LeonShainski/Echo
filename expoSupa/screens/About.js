@@ -161,7 +161,7 @@ function About() {
                 </View>
                 </ImageBackground>
                 <View>
-                    <Text style={styles.plainText3_2}>
+                    <Text style={styles.plainText3_lower}>
                         The Fact Score
                     </Text>
                     <Text style={styles.plainText4}>
@@ -169,7 +169,7 @@ function About() {
                     </Text>
                 </View>
                 <View>
-                    <Text style={styles.plainText3_2}>
+                    <Text style={styles.plainText3_lower}>
                         Sentiment Settings
                     </Text>
                     <Text style={styles.plainText4}>
@@ -178,7 +178,7 @@ function About() {
                     </Text>
                 </View>
                 <View>
-                    <Text style={styles.plainText3_2}>
+                    <Text style={styles.plainText3_lower}>
                         Favorites
                     </Text>
                     <Text style={styles.plainText4}>
@@ -188,7 +188,7 @@ function About() {
                     </Text>
                 </View>
                 <View>
-                    <Text style={styles.plainText3_2}>
+                    <Text style={styles.plainText3_lower}>
                         Time Zones
                     </Text>
                     <Text style={styles.plainText4}>
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
         textAlign: 'justify',
         fontFamily: 'sans-serif-medium', 
         
-    },plainText3_2: {
+    },plainText3_lower: {
         paddingTop: 20,
         marginLeft: 'auto',
         marginRight: 'auto',
