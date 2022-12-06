@@ -94,7 +94,7 @@ function Category(props) {
         <Text style={styles.title}>Categories</Text>
         {allCategories.map((currCategory, index) => {
           return (
-            <View key={index} style={{ flexDirection: 'row' }}>
+            <View key={index} style={{ flexDirection: 'row', paddingLeft:30 }}>
               <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
                 key={index}
                 style={[
@@ -108,13 +108,16 @@ function Category(props) {
               >
                 <Text style={styles.fadingText}></Text>
               </Animated.View>
+
               <Text style={styles.text}> {displayCategories[index]}</Text>
+
               <AdditionButton title={currCategory} onPress={(e) => includeCategory(currCategory, e)}>
                 Add
               </AdditionButton>
               <RemoveButton title={currCategory} onPress={(e) => deleteCategory(currCategory, e)}>
                 Remove
               </RemoveButton>
+              
             </View>
           )
         }
@@ -129,7 +132,7 @@ function Category(props) {
 
           {allCategories.map((currCategory, index) => {
             return (
-              <View key={index} style={{ flexDirection: 'row' }}>
+              <View key={index} style={{ flexDirection: 'row', paddingLeft: 30 }}>
                 <Switch
                   value={reduxCategory.includes(currCategory)} // change here
                   onValueChange={(e) => onOffSwitch(currCategory, e)} // change here
@@ -171,7 +174,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     paddingTop: 5,
-    paddingRight: 40
+    paddingRight: 40,
+    paddingButtom: 40
+    
   },
   inputField: {
     backgroundColor: '#fff',
@@ -218,7 +223,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     paddingTop: 5,
-    paddingRight: 40
+    paddingRight: 40,
+    
   },
   inputField: {
     backgroundColor: '#fff',
@@ -264,8 +270,8 @@ const styles = StyleSheet.create({
     textShadowRadius: 0.6,
     justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
-    fontSize: 20
+    textAlign: 'left',
+    fontSize: 21
   },
   safeView: {
     flex: 1,

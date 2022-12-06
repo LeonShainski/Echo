@@ -44,8 +44,15 @@ function InterestsList() {
     return (
       <SafeAreaView style={styles.safeView}>
         <ScrollView>
+
           <View>
-            <Text>Simplified View:</Text>
+            <FactScore />
+            <Sentiment simplified={simplifiedSettingsSelected} />
+            <Category simplified={simplifiedSettingsSelected} />
+          </View>
+          <Location />
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.title}>Simplified View:</Text>
             <Switch
               trackColor={{ false: "#767577", true: "#81b0ff" }}
               thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
@@ -54,8 +61,8 @@ function InterestsList() {
               value={simplifiedSettingsSelected}
             />
           </View>
+
           <FactScore />
-          
           <Sentiment simplified={simplifiedSettingsSelected} />
           <Category simplified={simplifiedSettingsSelected} />
           <Location />
@@ -64,30 +71,31 @@ function InterestsList() {
     );
   } else{
     return (
-    <SafeAreaView style={styles.safeView}>
-      <ScrollView>
-        <View>
-          <Text>Simplified View:</Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            activeText={'ON'}
-            inActiveText={'Off'}
-            onValueChange={toggleSettingsView}
-            value={simplifiedSettingsSelected}
-          />
-        </View>
-        <View>
+
+      <SafeAreaView style={styles.safeView}>
+        <ScrollView>
+          
           <FactScore />
           <Sentiment simplified={simplifiedSettingsSelected} />
           <Category simplified={simplifiedSettingsSelected} />
-        </View>
-        <Location />
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+          <Location />
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.title}>Simplified View:</Text>
+            <Switch
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              activeText={'ON'}
+              inActiveText={'Off'}
+              onValueChange={toggleSettingsView}
+              value={simplifiedSettingsSelected}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
 
 }
 
@@ -161,12 +169,13 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: 10,
-    paddingTop: 30,
-    paddingBottom: 10,
+    padding: 10,
     textShadowColor: 'green',
     textShadowRadius: 0.6,
-
-    fontSize: 20
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'left',
+    fontSize: 21
   },
   safeView: {
     flex: 1,

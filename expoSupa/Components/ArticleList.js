@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     borderWidth: 1
   }
 
-});
+});1
 
 export default ArticleList;
 
