@@ -89,6 +89,8 @@ function About() {
 
         <View>
             <ImageBackground source={{uri: 'https://i.ibb.co/Yj1DYxS/gradient-4.png'}} resizeMode={"stretch"}  style={{ width: '100%', resizeMode:'cover', marginTop: 'auto', marginBottom: 'auto'}}>
+        
+        <ImageBackground source={{uri: "https://i.ibb.co/jVbVsT5/gradient-9.png"}}>
         <View style={styles.pillarViews}>
             <Text style={styles.plainText3}>Your privacy is our 
             most topmost priority. We want to keep you informed with no strings attached. We require no log-in, we don't deal in cookies, and we do not collect an ounce of your data.
@@ -97,7 +99,9 @@ function About() {
             <Image source={{uri: 'https://i.ibb.co/h9c9sbG/security-image.jpg'}} style={styles.squareImages}/>
 
         </View>
+        </ImageBackground>
 
+        <ImageBackground source={{uri: "https://i.ibb.co/6Ps5kNB/gradient-12.png"}}>
         <View style={styles.pillarViews}>
             
             <Image source={{uri: 'https://i.ibb.co/Xzdhz2M/unity.jpg'}} style={styles.squareImages}/>
@@ -108,7 +112,9 @@ function About() {
         </Text>
 
         </View>
+        </ImageBackground>
 
+        <ImageBackground source={{uri: "https://i.ibb.co/7CP3SYp/gradient-13.png"}}>
         <View style={styles.pillarViews} id={"choice"}>
         <Text style={styles.plainText3}>Our choices reflect who we are, and there is nothing better than being your authentic self. 
         With Echo, instead of choosing what news you want to see, we can take away everything you DON'T want to see. That way, 
@@ -118,19 +124,22 @@ function About() {
         
 
         </View>
+        </ImageBackground>
 
-        <View style={styles.pillarViews}>
-                 
+        <ImageBackground source={{uri: "https://i.ibb.co/w6TP3hZ/gradient-14.png"}}>
+        <View style={styles.pillarViews}>             
             <Image source={{uri: 'https://i.ibb.co/PWkXzwS/honety.png'}} style={styles.squareImages}/>
         <Text style={styles.plainText3}>Honesty is, of course, the best policy. We take that saying to the next level.
         We use the best available fact-checking algorithms to give you our truth-rating, 
         as in how confident we are as to the factuality of any given article. 
         </Text>
-
-
         </View>
+        </ImageBackground>
+        
+        <ImageBackground source={{uri: "https://i.ibb.co/KGYJQhZ/gradient-15.png"}}>
 
         <View style={styles.pillarViews}>
+            
         <Text style={styles.plainText3}>"In diversity we all thrive" is a mantra we uphold dilligently here at Echo. 
         We bring you news that is local to you, but we always leave you room to explore the happenings in the world by easily switching between regions.
         </Text>
@@ -140,6 +149,7 @@ function About() {
 
 
         </View>
+        </ImageBackground>
         </ImageBackground>
         </View>
         
@@ -152,7 +162,7 @@ function About() {
             <UselessTextInputMultiline style={styles.commentBox}/>
             <PrimaryButton
                 onPress={onPressLearnMore}
-                title="Learn More"
+                title="Submit"
                 color="#841584"
                 accessibilityLabel=" button"
                 style={{height: 100, width: 100, shadowRadius: 2,
@@ -251,8 +261,14 @@ const styles = StyleSheet.create({
         
     },
     pillarViews: {
-        padding: 20,
-        flexDirection: 'row'
+        padding: 10,
+        paddingBottom: 20,
+        paddingTop: 20,
+        flexDirection: 'row',
+        borderRadius: 1,
+        borderColor: '#000',
+        borderWidth: 1,
+        
     },
     lowerContainer: {
         padding: 30

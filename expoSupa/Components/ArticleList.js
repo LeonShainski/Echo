@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     
   }
 
-});
+});1
 
 export default ArticleList;
 

@@ -31,8 +31,22 @@ function FactScore(props) {
 
     return (
         <View>
-            <Text>Factscore</Text>
-            <Text>{reduxFactScore}</Text>
+            <Text style={{
+    margin: 10,
+    textShadowColor: 'green',
+    textShadowRadius: 0.6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    fontSize: 21}}>Factscore</Text>
+            <Text style={{
+    paddingBottom: 10,
+    textShadowColor: 'green',
+    textShadowRadius: 0.6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    fontSize: 21}}>{reduxFactScore}</Text>
             <Slider
                 value={factScore}
                 onValueChange={setFactScore}

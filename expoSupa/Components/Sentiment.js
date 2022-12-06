@@ -82,7 +82,7 @@ function Sentiment(props) {
       {allSentiments.map((currSentiment, index) => {
         if (props.simplified) {
           return (
-            <View key={index} style={{ flexDirection: 'row' }}>
+            <View key={index} style={{ flexDirection: 'row', paddingLeft: 30 }}>
               <Animated.View //I SAVED A STACKOVERFLOW PAGE ON CHROME UNDER "CAPSTONE" BOOKMARKS THAT COULD
                 key={index}
                 style={[
@@ -109,7 +109,7 @@ function Sentiment(props) {
         else {
           return (
             
-                  <View key={index} style={{ flexDirection: 'row' }}>
+                  <View key={index} style={{ flexDirection: 'row', paddingLeft: 30 }}>
                     <Switch
                       value={reduxSentiment.includes(currSentiment)} // change here
                       onValueChange={(e) => onOffSwitch(currSentiment, e)} // change here
@@ -245,8 +245,8 @@ const styles = StyleSheet.create({
     textShadowRadius: 0.6,
     justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
-    fontSize: 20
+    textAlign: 'left',
+    fontSize: 21
   },
   safeView: {
     flex: 1,

@@ -30,10 +30,13 @@ function Location(props) {
 
     return (
         <View>
-            <Text style={styles.title}>Location</Text>
-            <View style={{ flexDirection: 'row', alignContent: 'center', borderColor: '#000000', borderWidth: 2 }}>
-                <RadioButton.Group onValueChange={value => setLocation(value)} value={location} >
-                    <RadioButton.Item label="EST" value="EST" />
+            <Text style={styles.title}>Time Zone</Text>
+            <View style={{ flexDirection: 'row', 
+            alignContent: 'center', 
+            paddingLeft: 50
+             }}>
+                <RadioButton.Group onValueChange={value => setLocation(value)} value={location} style={styles.radioButtonOptions}>
+                    <RadioButton.Item label="EST" value="EST" style={styles.radioButtonText}/>
                     <RadioButton.Item label="PST" value="PST" />
                     <RadioButton.Item label="CET" value="CET" />
                 </RadioButton.Group>
@@ -53,9 +56,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 22,
-        color: '#333',
-        fontWeight: 'bold',
+        margin: 10,
+        padding: 10,
+        textShadowColor: 'green',
+        textShadowRadius: 0.6,
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'left',
+        fontSize: 21},
+    radioButtonText: {
+        fontWeight: 'bold'
+    },
+    radioButtonOptions: {
+        flexDirection: 'row',
+        padding: 50
     }
 })
 
