@@ -5,7 +5,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const favoritesSlice = createSlice({
     name: 'favorites',
     initialState: {
-        favorites: [],
+        favorites: [{
+            "category": "Humanities",
+            "factScore": 0.100,
+            "favorite": false,
+            "id": 2000,
+            "img": "https://i.ibb.co/Xxj2MBP/abstractr.jpg",
+            "link": "https://leonshainski.github.io/Echo-Promo-Website/",
+            "location": "EST",
+            "sentiment": "Happy",
+            "summary": "This is where you will find your favorite articles. To get started saving your favourite articles, click on the star at the top-right corner of any given article! (P.S feel free to remove this 'article' or any other ones by pressing the star at the top-right of this article).",
+            "title": "Welcome to the article crpyt, where articles are kept forever (until you don't want them anymore).",
+          }],
+
         favIds: [],
     },
     reducers: {
