@@ -102,7 +102,7 @@ function ArticleList(props) {
       .in('sentiment', sentiment)
       .eq('location', location)
       .not('title', 'is', null)
-      .limit(50)
+      .limit(100)
 
     var arts = [];
     for (const key in artList.data) {
@@ -137,7 +137,7 @@ function ArticleList(props) {
   }
 
   async function loadMore() {
-    if (articles.length > 45) {
+    if (articles.length > 20) {
       var s = articles.pop();
       s = articles.pop();
       setId(s.id)

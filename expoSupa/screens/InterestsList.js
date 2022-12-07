@@ -46,10 +46,11 @@ function InterestsList() {
   if (simplifiedSettings) {
      
     return (
+      
       <SafeAreaView style={styles.safeView}>
-        <ScrollView>
+        <ScrollView style={styles.container}>
 
-          <View>
+          <View style={styles.container}>
             <FactScore />
             <Sentiment simplified={simplifiedSettings} />
             <Category simplified={simplifiedSettings} />
@@ -74,7 +75,7 @@ function InterestsList() {
     return (
 
       <SafeAreaView style={styles.safeView}>
-        <ScrollView>
+        <ScrollView >
           
           <FactScore />
           <Sentiment simplified={simplifiedSettings} />
@@ -103,7 +104,7 @@ function InterestsList() {
 const styles = StyleSheet.create({
   header: {
     width: '100%',
-    backgroundColor: '#dcdcdc',
+    backgroundColor: '#dfebf0',
     paddingTop: 48,
     paddingBottom: 10,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -180,12 +181,15 @@ const styles = StyleSheet.create({
   },
   safeView: {
     flex: 1,
-    backgroundColor: '#f3f7f0',
+    backgroundColor: '#dfebf0',
     justifyContent: "flex-end",
   },
   saveSettingsBtn: {
     padding: 20,
     flexDirection: 'row'
+  },
+  container: {
+    backgroundColor: '#dfebf0',
   },
 
   
