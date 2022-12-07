@@ -9,6 +9,8 @@ import Sentiment from '../Components/Sentiment';
 import Category from '../Components/Category';
 import Location from '../Components/Location';
 import { RadioButton } from 'react-native-paper';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeView } from '../store/simplified';
 
 
 
@@ -19,27 +21,29 @@ import { RadioButton } from 'react-native-paper';
 
 function InterestsList() {
 
-  const [simplifiedSettingsSelected, toggleSettings] = useState(false);
+  const reduxsimplified = useSelector((state) => state.simplified.simplified);
+  const [simplifiedSettings, toggleSettings] = useState(() => {return reduxsimplified==0;});
   //Animated Status
   // fadeAnim will be used as the value for opacity. Initial Value: 0
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const toggleSettingsView = (value) => {
+    console.log('value', value);
     toggleSettings(value);
-    console.log(simplifiedSettingsSelected);
+    console.log(simplifiedSettings);
   }
 
   
-  useEffect(() => {
+/*   useEffect(() => {
   const storedSettingsView = AsyncStorage.getItem('SETTINGS_VIEW_STORAGE_KEY');
   if (storedSettingsView !== undefined){
     toggleSettings(storedSettingsView == 'false')
   }
     return;
-  }, [])
+  }, []) */
 
 
-  if (simplifiedSettingsSelected) {
+  if (simplifiedSettings) {
      
     return (
       <SafeAreaView style={styles.safeView}>
@@ -47,18 +51,18 @@ function InterestsList() {
 
           <View>
             <FactScore />
-            <Sentiment simplified={simplifiedSettingsSelected} />
-            <Category simplified={simplifiedSettingsSelected} />
+            <Sentiment simplified={simplifiedSettings} />
+            <Category simplified={simplifiedSettings} />
           </View>
           <Location />
           <View style={{flexDirection: 'row'}}>
             <Text style={styles.title}>Simplified View:</Text>
             <Switch
               trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
+              thumbColor={simplifiedSettings ? "#f5dd4b" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSettingsView}
-              value={simplifiedSettingsSelected}
+              value={simplifiedSettings}
             />
           </View>
 
@@ -73,19 +77,19 @@ function InterestsList() {
         <ScrollView>
           
           <FactScore />
-          <Sentiment simplified={simplifiedSettingsSelected} />
-          <Category simplified={simplifiedSettingsSelected} />
+          <Sentiment simplified={simplifiedSettings} />
+          <Category simplified={simplifiedSettings} />
           <Location />
           <View style={{flexDirection: 'row'}}>
             <Text style={styles.title}>Simplified View:</Text>
             <Switch
               trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={simplifiedSettingsSelected ? "#f5dd4b" : "#f4f3f4"}
+              thumbColor={simplifiedSettings ? "#f5dd4b" : "#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
               activeText={'ON'}
               inActiveText={'Off'}
               onValueChange={toggleSettingsView}
-              value={simplifiedSettingsSelected}
+              value={simplifiedSettings}
             />
           </View>
         </ScrollView>

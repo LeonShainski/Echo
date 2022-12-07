@@ -4,6 +4,7 @@ import categoryReducer from "./category";
 import factScoreReducer from "./factscore";
 import locationReducer from "./location";
 import favoritesReducer from "./favorites";
+import simplifiedReducer from "./simplified";
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     sentiments: sentimentReducer,
     factScore: factScoreReducer,
     location: locationReducer,
-    favorites: favoritesReducer
+    favorites: favoritesReducer,
+    simplified: simplifiedReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
