@@ -8,4 +8,4 @@ You can also find our high-level system design on our wiki, [here](https://githu
 
 As we are in the early stages of our developement, everything is subjct to change. 
 
-We are excited to bring you your news!
+We are excited to bring you your news! Stay tuned via our website at https://leonshainski.github.io/Echo-Promo-Website/
